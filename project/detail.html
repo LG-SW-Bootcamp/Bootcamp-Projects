@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 상세 — LG SW Bootcamp 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="../index.html" class="logo">LG SW <span>Bootcamp</span></a>
+      <nav class="nav-links" id="nav-links">
+        <a href="../index.html#awards">수상작</a>
+        <a href="../index.html#projects">전체 프로젝트</a>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="메뉴 열기">☰</button>
+    </div>
+  </header>
+
+  <!-- Detail Hero -->
+  <section class="detail-hero" id="detail-hero">
+    <div class="container">
+      <a href="../index.html" class="detail-back">← 목록으로 돌아가기</a>
+      <div id="detail-award"></div>
+      <h1 class="detail-title" id="detail-title">로딩 중…</h1>
+      <p class="detail-team" id="detail-team"></p>
+    </div>
+  </section>
+
+  <!-- Detail Body -->
+  <section class="detail-body">
+    <div class="container">
+      <div class="detail-grid">
+        <div>
+          <p class="detail-desc" id="detail-desc"></p>
+
+          <div class="detail-nav" id="detail-nav"></div>
+        </div>
+        <aside class="detail-sidebar">
+          <div class="info-block">
+            <div class="info-label">팀원</div>
+            <div class="members-list" id="detail-members"></div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">기술 스택</div>
+            <div class="tech-list" id="detail-techs"></div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">링크</div>
+            <div class="link-list" id="detail-links"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <a href="../index.html">Bootcamp Home</a>
+      <p>© 2026 LG전자 SW공학연구소 SW역량강화팀. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/data-loader.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const data = await DataLoader.load();
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      if (!id) { location.href = '../index.html'; return; }
+
+      const result = DataLoader.getProject(id);
+      if (!result) { document.getElementById('detail-title').textContent = '프로젝트를 찾을 수 없습니다.'; return; }
+
+      const p = result;
+      const cohort = result.cohort;
+
+      document.title = `${p.title} — LG SW Bootcamp 2026`;
+      document.getElementById('detail-title').textContent = p.title;
+      document.getElementById('detail-team').textContent = `${p.team_name} · ${cohort.name}`;
+      document.getElementById('detail-desc').textContent = p.description;
+
+      if (p.award) {
+        document.getElementById('detail-award').innerHTML = `<span class="detail-award">${DataLoader.getAwardEmoji(p.award)} ${p.award}</span>`;
+      }
+
+      document.getElementById('detail-members').innerHTML = p.members.map(m => `<span class="member-tag">${m}</span>`).join('');
+      document.getElementById('detail-techs').innerHTML = p.tech_stack.map(t => `<span class="card-tech">${t}</span>`).join('');
+
+      const linkLabels = { github: '🔗 GitHub', demo: '🌐 Demo', video: '🎬 시연 영상' };
+      const links = Object.entries(p.links).filter(([,v]) => v).map(([k,v]) => `<a href="${v}" target="_blank" class="link-item">${linkLabels[k] || k}</a>`).join('');
+      document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--text-secondary);font-size:.85rem">링크 없음</span>';
+
+      // Prev / Next nav
+      const allProjects = cohort.projects;
+      const idx = allProjects.findIndex(x => x.id === id);
+      const prev = idx > 0 ? allProjects[idx - 1] : null;
+      const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
+      let navHtml = '';
+      if (prev) navHtml += `<a href="detail.html?id=${prev.id}"><span>← 이전</span><strong>${prev.title}</strong></a>`;
+      else navHtml += '<span></span>';
+      if (next) navHtml += `<a href="detail.html?id=${next.id}" style="text-align:right"><span>다음 →</span><strong>${next.title}</strong></a>`;
+      document.getElementById('detail-nav').innerHTML = navHtml;
+
+      // Theme
+      const themeBtn = document.getElementById('theme-toggle');
+      const saved = localStorage.getItem('theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+      themeBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const next = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeBtn.textContent = isDark ? '🌙' : '☀️';
+      });
+
+      // Mobile menu
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const navLinksEl = document.getElementById('nav-links');
+      if (mobileBtn) mobileBtn.addEventListener('click', () => navLinksEl.classList.toggle('open'));
+    });
+  </script>
+</body>
+</html>
