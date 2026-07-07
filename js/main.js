@@ -4,12 +4,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const data = await DataLoader.load();
 
   // --- State ---
-  let currentCohort = '13';
-  const hash = location.hash.replace('#', '');
-  if (hash === 'cohort-12') currentCohort = '12';
+  const currentCohort = '13';
 
   // --- DOM refs ---
-  const tabBtns = document.querySelectorAll('.cohort-tab');
   const heroBadge = document.getElementById('hero-cohort-badge');
   const awardContainer = document.getElementById('award-container');
   const projectGrid = document.getElementById('project-grid');
@@ -28,11 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Badge
     if (heroBadge) heroBadge.textContent = cohort.name;
-
-    // Tabs
-    tabBtns.forEach(b => {
-      b.classList.toggle('active', b.dataset.cohort === currentCohort);
-    });
 
     // Awards
     renderAwards();
@@ -132,18 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     observeReveal();
   }
 
-  // --- Tab switch ---
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentCohort = btn.dataset.cohort;
-      location.hash = `cohort-${currentCohort}`;
-      activeFilter = '전체';
-      filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === '전체'));
-      if (searchInput) searchInput.value = '';
-      render();
-    });
-  });
-
   // --- Filter ---
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -214,14 +194,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     requestAnimationFrame(tick);
   }
-
-  // --- Hash change ---
-  window.addEventListener('hashchange', () => {
-    const h = location.hash.replace('#', '');
-    if (h === 'cohort-12') currentCohort = '12';
-    else if (h === 'cohort-13') currentCohort = '13';
-    render();
-  });
 
   // Initial render
   render();
