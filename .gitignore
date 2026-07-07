@@ -9,3 +9,6 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Large output files
+data/final_output/
