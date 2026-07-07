@@ -38,12 +38,20 @@
     <div class="container">
       <div class="detail-grid">
         <div>
+          <div class="detail-poster-wrap" id="detail-poster-wrap" style="display:none">
+            <img id="detail-poster" alt="프로젝트 포스터" style="width:100%;border-radius:var(--radius);border:1px solid var(--border)">
+          </div>
           <div class="detail-video-wrap" id="detail-video-wrap" style="display:none">
             <video id="detail-video" controls style="width:100%;border-radius:var(--radius);background:#000">
               브라우저가 이 동영상 형식을 지원하지 않습니다. 아래 링크에서 다운로드해 주세요.
             </video>
           </div>
           <p class="detail-desc" id="detail-desc"></p>
+
+          <div class="detail-tech-highlights" id="detail-tech-highlights-block" style="display:none">
+            <h3 class="detail-subheading">핵심 기술</h3>
+            <ul class="tech-highlights-list" id="detail-tech-highlights"></ul>
+          </div>
 
           <div class="detail-nav" id="detail-nav"></div>
         </div>
@@ -109,13 +117,25 @@
         techsBlock.style.display = 'none';
       }
 
+      const techHighlightsBlock = document.getElementById('detail-tech-highlights-block');
+      if (p.tech_highlights && p.tech_highlights.length) {
+        document.getElementById('detail-tech-highlights').innerHTML = p.tech_highlights.map(t => `<li>${t}</li>`).join('');
+        techHighlightsBlock.style.display = 'block';
+      }
+
       const linkLabels = {
         github: '🔗 GitHub', demo: '🌐 Demo', video: '🎬 시연 영상',
         spec: '📄 요구사항 명세서', report: '📑 결과보고서', poster: '🖼️ 포스터'
       };
-      const links = Object.entries(p.links).filter(([,v]) => v)
+      const links = Object.entries(p.links).filter(([k,v]) => v && k !== 'poster_image')
         .map(([k,v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" class="link-item">${linkLabels[k] || k}</a>`).join('');
       document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--text-secondary);font-size:.85rem">자료 없음</span>';
+
+      // Poster image preview
+      if (p.links.poster_image) {
+        document.getElementById('detail-poster').src = DataLoader.resolveAsset(p.links.poster_image);
+        document.getElementById('detail-poster-wrap').style.display = 'block';
+      }
 
       // Video preview
       if (p.links.video) {

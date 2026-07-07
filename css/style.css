@@ -159,6 +159,10 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .detail-body{padding:48px 0}
 .detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:48px}
 .detail-desc{font-size:1rem;line-height:1.85;color:var(--text-secondary)}
+.detail-subheading{font-size:1rem;font-weight:700;margin:28px 0 12px}
+.tech-highlights-list{display:flex;flex-direction:column;gap:8px;padding-left:20px;color:var(--text-secondary);font-size:.92rem;line-height:1.6}
+.tech-highlights-list li{list-style:disc}
+.detail-poster-wrap{margin-bottom:20px}
 .detail-video-wrap{margin-bottom:28px}
 .detail-sidebar .info-block{margin-bottom:28px}
 .detail-sidebar .info-label{font-size:.82rem;font-weight:700;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;letter-spacing:.5px}

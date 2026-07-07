@@ -291,253 +291,412 @@
           "id": "13-A-1",
           "class": "A",
           "award": "",
-          "title": "Oracle Report",
+          "title": "Oracle",
           "team_name": "A반 1팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "박현우",
+            "김승진",
+            "나혁주",
+            "송유진"
+          ],
+          "summary": "온디바이스 기반 관상·사주 분석 서비스",
+          "description": "온디바이스 기반 관상·사주 분석 서비스",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_요구사항_명세서(1팀).md",
             "video": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_시연영상(1팀).mp4",
             "report": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_결과보고서(1팀).pptx",
-            "poster": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_포스터(1팀).pptx"
+            "poster": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_포스터(1팀).pptx",
+            "poster_image": "data/posters/A_1.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "llama.cpp + Gemma-4-E2B (GGUF 양자화) 로컬 추론",
+            "만세력 직접 계산 + JSON 스키마 출력 제한",
+            "KV 캐싱 프롬프트 최적화",
+            "멀티보드 적응형 스케줄러 분산 추론"
+          ]
         },
         {
           "id": "13-A-2",
           "class": "A",
           "award": "",
-          "title": "A반 2팀 프로젝트",
+          "title": "보스 베이비",
           "team_name": "A반 2팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "정지운",
+            "주수원",
+            "김승우",
+            "박새란"
+          ],
+          "summary": "사용자 데이터를 기반으로 먼저 반응하는 TV IoT 비서",
+          "description": "사용자 데이터를 기반으로 먼저 반응하는 TV IoT 비서",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_요구사항_명세서(2팀).md",
             "video": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_시연영상(2팀).mp4",
             "report": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_결과보고서(2팀).pdf",
-            "poster": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_포스터(2팀).pdf"
+            "poster": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_포스터(2팀).pdf",
+            "poster_image": "data/posters/A_2.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "STT: faster-whisper",
+            "LLM: Qwen3 30B 분산 추론 (Tensor Parallelism, 10~12 TPS)",
+            "TTS: MeloTTS + OpenVoiceV2",
+            "LLM SSE 스트리밍 + TTS Queue 지연 최소화"
+          ]
         },
         {
           "id": "13-A-3",
           "class": "A",
           "award": "",
-          "title": "A반 3팀 프로젝트",
+          "title": "AI 텔레파시 게임",
           "team_name": "A반 3팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "나민수",
+            "변효근",
+            "지종민",
+            "이다인"
+          ],
+          "summary": "몸짓을 통해 의도를 맞추는 AI 기반 협업 게임",
+          "description": "몸짓을 통해 의도를 맞추는 AI 기반 협업 게임",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_요구사항_명세서(3팀).md",
             "video": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_시연영상(3팀).mp4",
             "report": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_결과보고서(3팀).pptx",
-            "poster": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_포스터(3팀).pptx"
+            "poster": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_포스터(3팀).pptx",
+            "poster_image": "data/posters/A_3.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "MediaPipe Pose 3인 포즈 인식",
+            "관절 각도 벡터 코사인 유사도 채점 알고리즘",
+            "라즈베리파이 3대 멀티보드 실시간 파이프라인",
+            "Ollama 경량 LLM + TTS 게임 진행자"
+          ]
         },
         {
           "id": "13-A-4",
           "class": "A",
           "award": "",
-          "title": "A반 4팀 프로젝트",
+          "title": "2인 협동 탱크 게임",
           "team_name": "A반 4팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "채주환",
+            "조지은",
+            "차준혁"
+          ],
+          "summary": "손·팔 동작으로 탱크를 조작하는 체감형 협동 게임",
+          "description": "손·팔 동작으로 탱크를 조작하는 체감형 협동 게임",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_요구사항_명세서(4팀).md",
             "video": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_시연영상(4팀).mp4",
             "report": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_결과보고서(4팀).pptx",
-            "poster": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_포스터(4팀).pptx"
+            "poster": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_포스터(4팀).pptx",
+            "poster_image": "data/posters/A_4.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "MediaPipe Pose/Hand 규칙 기반 제스처 제어",
+            "Whisper.cpp STT + Qwen3-4B 음성 명령 인식",
+            "High/Low level 명령 통합 제어",
+            "Unity 2인 협동 게임 구현"
+          ]
         },
         {
           "id": "13-A-5",
           "class": "A",
           "award": "",
-          "title": "A반 5팀 프로젝트",
+          "title": "2D LG GUYS",
           "team_name": "A반 5팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "김경빈",
+            "김규민",
+            "심윤섭"
+          ],
+          "summary": "동작 인식으로 플레이하는 2D 멀티플레이 게임",
+          "description": "동작 인식으로 플레이하는 2D 멀티플레이 게임",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_요구사항_명세서(5팀).md",
             "video": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_시연영상(5팀).mp4",
             "report": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_결과보고서(5팀).pptx",
-            "poster": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_포스터(5팀).pptx"
+            "poster": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_포스터(5팀).pptx",
+            "poster_image": "data/posters/A_5.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "MoveNet + MediaPipe Hand 동작 인식",
+            "유선 스위치 허브 + 고정 IP (100ms 지연, 4인 동시)",
+            "FastAPI 권위형 서버 루프 + WebSocket",
+            "React + Phaser 2D 렌더링"
+          ]
         },
         {
           "id": "13-B-1",
           "class": "B",
           "award": "",
-          "title": "Go_NOW? (지금_갈까요?)",
+          "title": "지금 갈까요? (구; 결재 Hi-Pass)",
           "team_name": "B반 1팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "장혁수",
+            "이예지",
+            "엄윤정"
+          ],
+          "summary": "상사 상태를 분석해 결재 최적 타이밍을 추천",
+          "description": "상사 상태를 분석해 결재 최적 타이밍을 추천",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_요구사항_명세서(1팀).md",
             "video": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_시연영상(1팀).mov",
             "report": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_결과보고서(1팀).pptx",
-            "poster": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_포스터(1팀).pptx"
+            "poster": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_포스터(1팀).pptx",
+            "poster_image": "data/posters/B_1.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "표정 인식: MediaPipe Face Landmarker + FaceMesh 앙상블",
+            "한숨 인식: YAMNet TFLite 실시간 추론",
+            "발화 인식: webrtcvad + faster-whisper + KoBERT 감정 분류",
+            "가중 위험점수 R 기반 신호등 판정"
+          ]
         },
         {
           "id": "13-B-2",
           "class": "B",
           "award": "",
-          "title": "B반 2팀 프로젝트",
+          "title": "LG 스타일러 AI 옷 추천 시스템",
           "team_name": "B반 2팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "공태훈",
+            "이동민",
+            "이승현",
+            "조형준"
+          ],
+          "summary": "자연어 기반 맞춤 의류 추천 시스템",
+          "description": "자연어 기반 맞춤 의류 추천 시스템",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_요구사항_명세서(2팀).md",
             "video": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_시연영상(2팀).mp4",
             "report": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_결과보고서(2팀).pptx",
-            "poster": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_포스터(2팀).pptx"
+            "poster": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_포스터(2팀).pptx",
+            "poster_image": "data/posters/B_2.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "CLIP 임베딩 + Outfit-Graph Vector DB 코디 추천",
+            "On-device/Cloud VTON 게이트 라우팅 (MobileVTON ↔ FASHN v1.6)",
+            "손 트래킹 비접촉 UI"
+          ]
         },
         {
           "id": "13-B-3",
           "class": "B",
           "award": "",
-          "title": "온디바이스 프로액티브 차량 AI 에이전트",
+          "title": "능동형 차량용 에이전트",
           "team_name": "B반 3팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "김희수",
+            "김연진",
+            "한소희",
+            "김민서"
+          ],
+          "summary": "차량 상황을 이해해 사용자를 대신해 행동하는 AI",
+          "description": "차량 상황을 이해해 사용자를 대신해 행동하는 AI",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_요구사항_명세서(3팀).md",
             "video": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_시연영상(3팀).mp4",
             "report": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_결과보고서(3팀).pptx",
-            "poster": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_포스터(3팀).pptx"
+            "poster": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_포스터(3팀).pptx",
+            "poster_image": "data/posters/B_3.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "에이전트 엔진 (센서 데이터 → 맥락 조립)",
+            "VLM: Qwen 9B (Thor 보드)",
+            "온디바이스 모듈 5종: Silero-VAD, Zipformer STT, Piper TTS, InsightFace"
+          ]
         },
         {
           "id": "13-B-4",
           "class": "B",
           "award": "",
-          "title": "B반 4팀 프로젝트",
+          "title": "온디바이스 기반 개인 맞춤형 헬스 코칭 시스템",
           "team_name": "B반 4팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "이범석",
+            "송은지",
+            "김진성"
+          ],
+          "summary": "Raspberry Pi에서 자세 인식과 LLM으로 개인화 운동 코칭 제공",
+          "description": "Raspberry Pi에서 자세 인식과 LLM으로 개인화 운동 코칭 제공",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_요구사항_명세서(4팀).md",
             "video": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_시연영상(4팀).mp4",
             "report": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_결과보고서(4팀).pptx",
-            "poster": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_포스터(4팀).pptx"
+            "poster": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_포스터(4팀).pptx",
+            "poster_image": "data/posters/B_4.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "MediaPipe Pose + YAML 규칙 채점 엔진",
+            "개인별 ROM 보정 + 비전 체형 분석",
+            "음성 코칭: Qwen3-ASR → Gemma 4 E2B → TTS (100% 로컬)"
+          ]
         },
         {
           "id": "13-B-5",
           "class": "B",
           "award": "",
-          "title": "B반 5팀 프로젝트",
+          "title": "레이더 기반 낙상·제스처 인식 바스에어 제어",
           "team_name": "B반 5팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "김현아",
+            "정진효",
+            "강민석"
+          ],
+          "summary": "사생활 보호를 위한 비접촉 제스처 제어 및 욕실 안전 모니터링 시스템",
+          "description": "사생활 보호를 위한 비접촉 제스처 제어 및 욕실 안전 모니터링 시스템",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_요구사항_명세서(5팀).md",
             "video": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_시연영상(5팀).mp4",
             "report": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_결과보고서(5팀).pptx",
-            "poster": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_포스터(5팀).pptx"
+            "poster": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_포스터(5팀).pptx",
+            "poster_image": "data/posters/B_5.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "1Hz mmWave 레이더 비영상 센싱",
+            "3초 윈도우 통계 피처 엔지니어링",
+            "Random Forest 제스처/낙상 분류",
+            "Bath-Air 제어 + ThinQ 알림 연동"
+          ]
         },
         {
           "id": "13-C-1",
           "class": "C",
           "award": "",
-          "title": "Dadumi",
+          "title": "In-Line AI 글쓰기 어시스턴트",
           "team_name": "C반 1팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "김문주",
+            "김가영",
+            "이가연",
+            "하성헌"
+          ],
+          "summary": "작업 중 바로 사용하는 AI 글쓰기 도우미",
+          "description": "작업 중 바로 사용하는 AI 글쓰기 도우미",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_요구사항_명세서(1팀).md",
             "video": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_시연영상(1팀).mp4",
             "report": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_결과보고서(1팀).pptx",
-            "poster": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_포스터(1팀).pptx"
+            "poster": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_포스터(1팀).pptx",
+            "poster_image": "data/posters/C_1.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "Tauri 2 (Rust) + React 크로스 플랫폼 앱",
+            "OS별 접근성 API 텍스트 캡처/자동 삽입",
+            "멀티 AI 프로바이더 연동 (OpenAI·Anthropic·Gemini 등)"
+          ]
         },
         {
           "id": "13-C-2",
           "class": "C",
           "award": "",
-          "title": "C반 2팀 프로젝트",
+          "title": "PPT → JSON 변환 시스템",
           "team_name": "C반 2팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "최원일",
+            "권동욱",
+            "김현서",
+            "양준석"
+          ],
+          "summary": "PPT를 구조화 데이터로 자동 변환",
+          "description": "PPT를 구조화 데이터로 자동 변환",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_요구사항_명세서(2팀).md",
             "video": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_시연영상(2팀).mp4",
             "report": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_결과보고서(2팀).pptx",
-            "poster": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_포스터(2팀).pptx"
+            "poster": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_포스터(2팀).pptx",
+            "poster_image": "data/posters/C_2.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "복잡한 표 Placeholder 마스킹 전처리",
+            "비전 LLM key-value 쌍 추출",
+            "Self-Refine 자기개선 루프",
+            "표 구조 복원·병합 → JSON/Excel 변환"
+          ]
         },
         {
           "id": "13-C-3",
           "class": "C",
           "award": "",
-          "title": "C반 3팀 프로젝트",
+          "title": "요즘애드",
           "team_name": "C반 3팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "임형준",
+            "박주호",
+            "이지수",
+            "전주현"
+          ],
+          "summary": "광고 문구의 논란 요소를 AI로 분석",
+          "description": "광고 문구의 논란 요소를 AI로 분석",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_요구사항_명세서(3팀).md",
             "video": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_시연영상(3팀).mp4",
             "report": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_결과보고서(3팀).pptx",
-            "poster": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_포스터(3팀).pptx"
+            "poster": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_포스터(3팀).pptx",
+            "poster_image": "data/posters/C_3.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "임베딩 + pgvector 유사도 검색",
+            "RAG 융합 검색 (벡터 + 키워드 RRF + 날짜 부스트)",
+            "gpt-5.4-mini JSON 판정 (위험도·근거·대체 문구)",
+            "CLOVA OCR 포스터 문구 추출"
+          ]
         },
         {
           "id": "13-C-4",
           "class": "C",
           "award": "",
-          "title": "C반 4팀 프로젝트",
+          "title": "Copilot Meta Prompting",
           "team_name": "C반 4팀",
-          "members": [],
-          "summary": "요구사항 명세서 · 시연 영상 · 결과보고서 · 포스터 제공",
-          "description": "프로젝트 상세 내용은 요구사항 명세서를 참고하세요.",
+          "members": [
+            "김태용",
+            "김민정",
+            "박혜림",
+            "홍창표"
+          ],
+          "summary": "Local LLM으로 Copilot 쓰기전 프롬프트 자동 보강",
+          "description": "Local LLM으로 Copilot 쓰기전 프롬프트 자동 보강",
           "tech_stack": [],
           "links": {
             "spec": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_요구사항_명세서(4팀).md",
             "video": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_시연영상(4팀).mp4",
             "report": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_결과보고서(4팀).pptx",
-            "poster": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_포스터(4팀).pptx"
+            "poster": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_포스터(4팀).pptx",
+            "poster_image": "data/posters/C_4.png"
           },
-          "thumbnail": ""
+          "thumbnail": "",
+          "tech_highlights": [
+            "LLM 프롬프트 정제",
+            "Chroma 벡터 DB 유사 템플릿 검색 (Top-20)",
+            "리랭킹 모델 Top-3 선정",
+            "최종 프롬프트 생성 (VS Code Extension + FastAPI)"
+          ]
         }
       ]
     }
