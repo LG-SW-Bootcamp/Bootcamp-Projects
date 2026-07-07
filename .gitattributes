@@ -1,0 +1,3 @@
+data/submissions/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+data/submissions/**/*.mov filter=lfs diff=lfs merge=lfs -text
+data/submissions/A반/4팀/LG_부트캠프_13기_A반_결과보고서(4팀).pptx filter=lfs diff=lfs merge=lfs -text
