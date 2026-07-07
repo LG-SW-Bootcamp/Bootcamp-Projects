@@ -38,21 +38,26 @@
     <div class="container">
       <div class="detail-grid">
         <div>
+          <div class="detail-video-wrap" id="detail-video-wrap" style="display:none">
+            <video id="detail-video" controls style="width:100%;border-radius:var(--radius);background:#000">
+              브라우저가 이 동영상 형식을 지원하지 않습니다. 아래 링크에서 다운로드해 주세요.
+            </video>
+          </div>
           <p class="detail-desc" id="detail-desc"></p>
 
           <div class="detail-nav" id="detail-nav"></div>
         </div>
         <aside class="detail-sidebar">
-          <div class="info-block">
+          <div class="info-block" id="detail-members-block">
             <div class="info-label">팀원</div>
             <div class="members-list" id="detail-members"></div>
           </div>
-          <div class="info-block">
+          <div class="info-block" id="detail-techs-block">
             <div class="info-label">기술 스택</div>
             <div class="tech-list" id="detail-techs"></div>
           </div>
           <div class="info-block">
-            <div class="info-label">링크</div>
+            <div class="info-label">자료</div>
             <div class="link-list" id="detail-links"></div>
           </div>
         </aside>
@@ -90,12 +95,34 @@
         document.getElementById('detail-award').innerHTML = `<span class="detail-award">${DataLoader.getAwardEmoji(p.award)} ${p.award}</span>`;
       }
 
-      document.getElementById('detail-members').innerHTML = p.members.map(m => `<span class="member-tag">${m}</span>`).join('');
-      document.getElementById('detail-techs').innerHTML = p.tech_stack.map(t => `<span class="card-tech">${t}</span>`).join('');
+      const membersBlock = document.getElementById('detail-members-block');
+      if (p.members && p.members.length) {
+        document.getElementById('detail-members').innerHTML = p.members.map(m => `<span class="member-tag">${m}</span>`).join('');
+      } else {
+        membersBlock.style.display = 'none';
+      }
 
-      const linkLabels = { github: '🔗 GitHub', demo: '🌐 Demo', video: '🎬 시연 영상' };
-      const links = Object.entries(p.links).filter(([,v]) => v).map(([k,v]) => `<a href="${v}" target="_blank" class="link-item">${linkLabels[k] || k}</a>`).join('');
-      document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--text-secondary);font-size:.85rem">링크 없음</span>';
+      const techsBlock = document.getElementById('detail-techs-block');
+      if (p.tech_stack && p.tech_stack.length) {
+        document.getElementById('detail-techs').innerHTML = p.tech_stack.map(t => `<span class="card-tech">${t}</span>`).join('');
+      } else {
+        techsBlock.style.display = 'none';
+      }
+
+      const linkLabels = {
+        github: '🔗 GitHub', demo: '🌐 Demo', video: '🎬 시연 영상',
+        spec: '📄 요구사항 명세서', report: '📑 결과보고서', poster: '🖼️ 포스터'
+      };
+      const links = Object.entries(p.links).filter(([,v]) => v)
+        .map(([k,v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" class="link-item">${linkLabels[k] || k}</a>`).join('');
+      document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--text-secondary);font-size:.85rem">자료 없음</span>';
+
+      // Video preview
+      if (p.links.video) {
+        const videoEl = document.getElementById('detail-video');
+        videoEl.src = DataLoader.resolveAsset(p.links.video);
+        document.getElementById('detail-video-wrap').style.display = 'block';
+      }
 
       // Prev / Next nav
       const allProjects = cohort.projects;

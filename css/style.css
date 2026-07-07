@@ -105,6 +105,14 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .award-label.excellent{border-color:#c0c0c0;color:#6b7280}
 .award-label.good{border-color:#cd7f32;color:#92400e}
 
+/* ---------- Class (반) Groups ---------- */
+.class-group{margin-bottom:48px}
+.class-label{display:inline-flex;align-items:center;gap:8px;font-size:1.15rem;font-weight:700;margin-bottom:20px;padding:8px 20px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.class-label .class-count{font-size:.8rem;font-weight:600;color:var(--text-secondary)}
+.class-label.class-a{border-color:var(--accent);color:#0891b2}
+.class-label.class-b{border-color:#a78bfa;color:#7c3aed}
+.class-label.class-c{border-color:#fb923c;color:#c2410c}
+
 /* ---------- Card ---------- */
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all var(--transition);cursor:pointer;position:relative}
@@ -151,6 +159,7 @@ button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 .detail-body{padding:48px 0}
 .detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:48px}
 .detail-desc{font-size:1rem;line-height:1.85;color:var(--text-secondary)}
+.detail-video-wrap{margin-bottom:28px}
 .detail-sidebar .info-block{margin-bottom:28px}
 .detail-sidebar .info-label{font-size:.82rem;font-weight:700;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;letter-spacing:.5px}
 .detail-sidebar .members-list{display:flex;flex-wrap:wrap;gap:8px}

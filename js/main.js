@@ -101,11 +101,32 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    projects.forEach(p => {
-      const card = DataLoader.renderCard(p);
-      card.classList.add('reveal');
-      projectGrid.appendChild(card);
-    });
+    const classGroups = DataLoader.groupByClass(projects);
+
+    if (classGroups) {
+      // Render grouped by 반 (class), each group its own grid
+      projectGrid.classList.remove('card-grid');
+      classGroups.forEach(({ class: cls, projects: groupProjects }) => {
+        const group = document.createElement('div');
+        group.className = 'class-group reveal';
+        group.innerHTML = `<div class="class-label class-${cls.toLowerCase()}">${cls}반 <span class="class-count">${groupProjects.length}팀</span></div>`;
+        const grid = document.createElement('div');
+        grid.className = 'card-grid';
+        groupProjects
+          .slice()
+          .sort((a, b) => (a.team_name || '').localeCompare(b.team_name || '', 'ko', { numeric: true }))
+          .forEach(p => grid.appendChild(DataLoader.renderCard(p)));
+        group.appendChild(grid);
+        projectGrid.appendChild(group);
+      });
+    } else {
+      projectGrid.classList.add('card-grid');
+      projects.forEach(p => {
+        const card = DataLoader.renderCard(p);
+        card.classList.add('reveal');
+        projectGrid.appendChild(card);
+      });
+    }
     observeReveal();
   }
 

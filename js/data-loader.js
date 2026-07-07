@@ -11,6 +11,12 @@ const DataLoader = (() => {
     return data;
   }
 
+  // Resolve a root-relative asset path (e.g. "data/submissions/...") from any page
+  function resolveAsset(path) {
+    if (!path || /^https?:\/\//.test(path)) return path;
+    return location.pathname.includes('/project/') ? `../${path}` : path;
+  }
+
   function getCohort(cohortId) {
     if (!data) return null;
     return data.cohorts[cohortId] || null;
@@ -41,6 +47,18 @@ const DataLoader = (() => {
   function getAllProjects(cohortId) {
     const c = getCohort(cohortId);
     return c ? c.projects : [];
+  }
+
+  // Group projects by `class` (반). Returns null if projects don't carry a class field.
+  function groupByClass(projects) {
+    if (!projects.some(p => p.class)) return null;
+    const groups = {};
+    projects.forEach(p => {
+      const key = p.class || '기타';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(p);
+    });
+    return Object.keys(groups).sort().map(key => ({ class: key, projects: groups[key] }));
   }
 
   // Render a project card
@@ -75,5 +93,5 @@ const DataLoader = (() => {
     return map[award] || '';
   }
 
-  return { load, getCohort, getProject, getAwardProjects, getAllProjects, renderCard, getAwardEmoji };
+  return { load, getCohort, getProject, getAwardProjects, getAllProjects, groupByClass, renderCard, getAwardEmoji, resolveAsset };
 })();
