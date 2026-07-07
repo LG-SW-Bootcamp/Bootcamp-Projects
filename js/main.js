@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       groups[p.award].push(p);
     });
 
-    const labelClass = { '대상': 'grand', '최우수상': 'excellent', '우수상': 'good', '인기상': '' };
+    const labelClass = { '대상': 'grand', '최우수상': 'excellent', '우수상': 'good', '인기상': '', '우수 프로젝트': 'grand' };
 
     for (const [award, projects] of Object.entries(groups)) {
       const group = document.createElement('div');
@@ -78,8 +78,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Filter
     if (activeFilter !== '전체') {
-      if (activeFilter === '수상작') {
+      if (activeFilter === '우수 프로젝트') {
         projects = projects.filter(p => p.award && p.award !== '');
+      } else if (['A', 'B', 'C'].includes(activeFilter)) {
+        projects = projects.filter(p => p.class === activeFilter);
       } else {
         projects = projects.filter(p => p.award === activeFilter);
       }

@@ -380,7 +380,7 @@
         {
           "id": "13-A-4",
           "class": "A",
-          "award": "",
+          "award": "우수 프로젝트",
           "title": "2인 협동 탱크 게임",
           "team_name": "A반 4팀",
           "members": [
@@ -467,7 +467,7 @@
         {
           "id": "13-B-2",
           "class": "B",
-          "award": "",
+          "award": "우수 프로젝트",
           "title": "LG 스타일러 AI 옷 추천 시스템",
           "team_name": "B반 2팀",
           "members": [
@@ -671,7 +671,7 @@
         {
           "id": "13-C-4",
           "class": "C",
-          "award": "",
+          "award": "우수 프로젝트",
           "title": "Copilot Meta Prompting",
           "team_name": "C반 4팀",
           "members": [

@@ -73,6 +73,9 @@ const DataLoader = (() => {
       : '';
 
     const techs = project.tech_stack.slice(0, 4).map(t => `<span class="card-tech">${t}</span>`).join('');
+    const teamLabel = project.members && project.members.length
+      ? `${project.team_name} (${project.members.join(', ')})`
+      : project.team_name;
 
     card.innerHTML = `
       <div class="card-thumb">
@@ -81,7 +84,7 @@ const DataLoader = (() => {
       </div>
       <div class="card-body">
         <h3 class="card-title">${project.title}</h3>
-        <p class="card-team">${project.team_name}</p>
+        <p class="card-team">${teamLabel}</p>
         <p class="card-summary">${project.summary}</p>
         <div class="card-techs">${techs}</div>
       </div>`;
@@ -89,7 +92,7 @@ const DataLoader = (() => {
   }
 
   function getAwardEmoji(award) {
-    const map = { '대상': '🏆', '최우수상': '🥈', '우수상': '🥉', '인기상': '⭐' };
+    const map = { '대상': '🏆', '최우수상': '🥈', '우수상': '🥉', '인기상': '⭐', '우수 프로젝트': '🏆' };
     return map[award] || '';
   }
 
