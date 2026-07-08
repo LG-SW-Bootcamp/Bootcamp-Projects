@@ -11,9 +11,11 @@ const DataLoader = (() => {
     return data;
   }
 
+  const ASSET_VER = '4'; // bump to force browsers to refetch changed posters/videos
   function resolveAsset(path) {
     if (!path || /^https?:\/\//.test(path)) return path;
-    return location.pathname.includes('/project/') ? `../${path}` : path;
+    const rel = location.pathname.includes('/project/') ? `../${path}` : path;
+    return rel + (rel.includes('?') ? '&' : '?') + 'v=' + ASSET_VER;
   }
 
   function getCohort(id) { return data ? (data.cohorts[id] || null) : null; }
