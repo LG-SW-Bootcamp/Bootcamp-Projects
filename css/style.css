@@ -326,7 +326,10 @@ footer { padding: 88px 0 0; border-top: 1px solid var(--hairline); }
 .detail-body { padding: 56px 0 88px; }
 .detail-grid { display: grid; grid-template-columns: 1.7fr 1fr; gap: 56px; }
 .detail-poster-wrap { margin-bottom: 24px; }
-.detail-poster-wrap img { width: 100%; border-radius: 10px; border: 1px solid var(--hairline); box-shadow: 0 18px 50px -28px rgba(38,34,42,0.45); }
+.detail-poster-img { width: 100%; border-radius: 10px; border: 1px solid var(--hairline); box-shadow: 0 18px 50px -28px rgba(38,34,42,0.45); }
+.detail-poster-img + .poster-pageno { margin-top: 26px; }
+.detail-poster-wrap .detail-poster-img:not(:last-child) { margin-bottom: 4px; }
+.poster-pageno { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-500); margin: 0 0 8px; }
 /* browser-chrome frame around demo video (learnify device reused) */
 .video-frame { border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px -30px rgba(38,34,42,0.4); margin-bottom: 28px; }
 .video-frame .win-chrome { border-radius: 0; }

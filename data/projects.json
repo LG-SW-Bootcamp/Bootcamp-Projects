@@ -29,7 +29,10 @@
             "video": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_시연영상(1팀).mp4",
             "report": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_결과보고서(1팀).pptx",
             "poster": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_포스터(1팀).pptx",
-            "poster_image": "data/posters/A_1.png"
+            "poster_image": "data/posters/A_1.png",
+            "poster_images": [
+              "data/posters/A_1.png"
+            ]
           },
           "thumbnail": "data/posters/A_1.png",
           "tech_highlights": [
@@ -59,7 +62,11 @@
             "video": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_시연영상(2팀).mp4",
             "report": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_결과보고서(2팀).pdf",
             "poster": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_포스터(2팀).pdf",
-            "poster_image": "data/posters/A_2.png"
+            "poster_image": "data/posters/A_2.png",
+            "poster_images": [
+              "data/posters/A_2.png",
+              "data/posters/A_2_2.png"
+            ]
           },
           "thumbnail": "data/posters/A_2.png",
           "tech_highlights": [
@@ -89,7 +96,10 @@
             "video": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_시연영상(3팀).mp4",
             "report": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_결과보고서(3팀).pptx",
             "poster": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_포스터(3팀).pptx",
-            "poster_image": "data/posters/A_3.png"
+            "poster_image": "data/posters/A_3.png",
+            "poster_images": [
+              "data/posters/A_3.png"
+            ]
           },
           "thumbnail": "data/posters/A_3.png",
           "tech_highlights": [
@@ -118,7 +128,11 @@
             "video": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_시연영상(4팀).mp4",
             "report": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_결과보고서(4팀).pptx",
             "poster": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_포스터(4팀).pptx",
-            "poster_image": "data/posters/A_4.png"
+            "poster_image": "data/posters/A_4.png",
+            "poster_images": [
+              "data/posters/A_4.png",
+              "data/posters/A_4_2.png"
+            ]
           },
           "thumbnail": "data/posters/A_4.png",
           "tech_highlights": [
@@ -147,7 +161,13 @@
             "video": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_시연영상(5팀).mp4",
             "report": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_결과보고서(5팀).pptx",
             "poster": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_포스터(5팀).pptx",
-            "poster_image": "data/posters/A_5.png"
+            "poster_image": "data/posters/A_5.png",
+            "poster_images": [
+              "data/posters/A_5.png",
+              "data/posters/A_5_2.png",
+              "data/posters/A_5_3.png",
+              "data/posters/A_5_4.png"
+            ]
           },
           "thumbnail": "data/posters/A_5.png",
           "tech_highlights": [
@@ -176,7 +196,13 @@
             "video": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_시연영상(1팀).mp4",
             "report": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_결과보고서(1팀).pptx",
             "poster": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_포스터(1팀).pptx",
-            "poster_image": "data/posters/B_1.png"
+            "poster_image": "data/posters/B_1.png",
+            "poster_images": [
+              "data/posters/B_1.png",
+              "data/posters/B_1_2.png",
+              "data/posters/B_1_3.png",
+              "data/posters/B_1_4.png"
+            ]
           },
           "thumbnail": "data/posters/B_1.png",
           "tech_highlights": [
@@ -206,7 +232,12 @@
             "video": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_시연영상(2팀).mp4",
             "report": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_결과보고서(2팀).pptx",
             "poster": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_포스터(2팀).pptx",
-            "poster_image": "data/posters/B_2.png"
+            "poster_image": "data/posters/B_2.png",
+            "poster_images": [
+              "data/posters/B_2.png",
+              "data/posters/B_2_2.png",
+              "data/posters/B_2_3.png"
+            ]
           },
           "thumbnail": "data/posters/B_2.png",
           "tech_highlights": [
@@ -235,7 +266,11 @@
             "video": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_시연영상(3팀).mp4",
             "report": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_결과보고서(3팀).pptx",
             "poster": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_포스터(3팀).pptx",
-            "poster_image": "data/posters/B_3.png"
+            "poster_image": "data/posters/B_3.png",
+            "poster_images": [
+              "data/posters/B_3.png",
+              "data/posters/B_3_2.png"
+            ]
           },
           "thumbnail": "data/posters/B_3.png",
           "tech_highlights": [
@@ -263,7 +298,11 @@
             "video": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_시연영상(4팀).mp4",
             "report": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_결과보고서(4팀).pptx",
             "poster": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_포스터(4팀).pptx",
-            "poster_image": "data/posters/B_4.png"
+            "poster_image": "data/posters/B_4.png",
+            "poster_images": [
+              "data/posters/B_4.png",
+              "data/posters/B_4_2.png"
+            ]
           },
           "thumbnail": "data/posters/B_4.png",
           "tech_highlights": [
@@ -291,7 +330,10 @@
             "video": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_시연영상(5팀).mp4",
             "report": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_결과보고서(5팀).pptx",
             "poster": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_포스터(5팀).pptx",
-            "poster_image": "data/posters/B_5.png"
+            "poster_image": "data/posters/B_5.png",
+            "poster_images": [
+              "data/posters/B_5.png"
+            ]
           },
           "thumbnail": "data/posters/B_5.png",
           "tech_highlights": [
@@ -321,7 +363,13 @@
             "video": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_시연영상(1팀).mp4",
             "report": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_결과보고서(1팀).pptx",
             "poster": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_포스터(1팀).pptx",
-            "poster_image": "data/posters/C_1.png"
+            "poster_image": "data/posters/C_1.png",
+            "poster_images": [
+              "data/posters/C_1.png",
+              "data/posters/C_1_2.png",
+              "data/posters/C_1_3.png",
+              "data/posters/C_1_4.png"
+            ]
           },
           "thumbnail": "data/posters/C_1.png",
           "tech_highlights": [
@@ -350,7 +398,11 @@
             "video": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_시연영상(2팀).mp4",
             "report": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_결과보고서(2팀).pptx",
             "poster": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_포스터(2팀).pptx",
-            "poster_image": "data/posters/C_2.png"
+            "poster_image": "data/posters/C_2.png",
+            "poster_images": [
+              "data/posters/C_2.png",
+              "data/posters/C_2_2.png"
+            ]
           },
           "thumbnail": "data/posters/C_2.png",
           "tech_highlights": [
@@ -380,7 +432,13 @@
             "video": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_시연영상(3팀).mp4",
             "report": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_결과보고서(3팀).pptx",
             "poster": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_포스터(3팀).pptx",
-            "poster_image": "data/posters/C_3.png"
+            "poster_image": "data/posters/C_3.png",
+            "poster_images": [
+              "data/posters/C_3.png",
+              "data/posters/C_3_2.png",
+              "data/posters/C_3_3.png",
+              "data/posters/C_3_4.png"
+            ]
           },
           "thumbnail": "data/posters/C_3.png",
           "tech_highlights": [
@@ -410,7 +468,11 @@
             "video": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_시연영상(4팀).mp4",
             "report": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_결과보고서(4팀).pptx",
             "poster": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_포스터(4팀).pptx",
-            "poster_image": "data/posters/C_4.png"
+            "poster_image": "data/posters/C_4.png",
+            "poster_images": [
+              "data/posters/C_4.png",
+              "data/posters/C_4_2.png"
+            ]
           },
           "thumbnail": "data/posters/C_4.png",
           "tech_highlights": [

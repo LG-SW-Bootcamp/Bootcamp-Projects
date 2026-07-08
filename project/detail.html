@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="../css/style.css?v=6" />
+  <link rel="stylesheet" href="../css/style.css?v=7" />
 </head>
 <body>
 
@@ -36,9 +36,7 @@
     <div class="container-wide">
       <div class="detail-grid">
         <div>
-          <div class="detail-poster-wrap" id="detail-poster-wrap" style="display:none">
-            <img id="detail-poster" alt="프로젝트 포스터" />
-          </div>
+          <div class="detail-poster-wrap" id="detail-poster-wrap" style="display:none"></div>
           <div class="video-frame" id="detail-video-wrap" style="display:none">
             <div class="win-chrome"><span class="traffic r"></span><span class="traffic y"></span><span class="traffic g"></span><span class="url">demo</span></div>
             <video id="detail-video" controls>브라우저가 이 동영상 형식을 지원하지 않습니다.</video>
@@ -112,14 +110,22 @@
 
       // materials
       const labels = { spec: '요구사항 명세서', video: '시연 영상', report: '결과보고서', poster: '포스터', github: 'GitHub', demo: 'Demo' };
-      const links = Object.entries(p.links).filter(([k, v]) => v && k !== 'poster_image')
+      const links = Object.entries(p.links).filter(([k, v]) => v && k !== 'poster_image' && k !== 'poster_images')
         .map(([k, v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" rel="noopener" class="link-item">${labels[k] || k} <span style="margin-left:auto;color:var(--ink-500)">↗</span></a>`).join('');
       document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--ink-500);font-size:14px">자료 없음</span>';
 
-      // poster
-      if (p.links.poster_image) {
-        document.getElementById('detail-poster').src = DataLoader.resolveAsset(p.links.poster_image);
-        document.getElementById('detail-poster-wrap').style.display = 'block';
+      // poster(s) — show every page
+      const posters = (p.links.poster_images && p.links.poster_images.length)
+        ? p.links.poster_images
+        : (p.links.poster_image ? [p.links.poster_image] : []);
+      if (posters.length) {
+        const wrap = document.getElementById('detail-poster-wrap');
+        wrap.innerHTML = posters.map((src, i) => {
+          const label = posters.length > 1
+            ? `<div class="poster-pageno">${String(i + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}</div>` : '';
+          return `${label}<img class="detail-poster-img" src="${DataLoader.resolveAsset(src)}" alt="${p.title} 포스터 ${i + 1}" loading="lazy">`;
+        }).join('');
+        wrap.style.display = 'block';
       }
       // video (framed in browser chrome) — with graceful fallback
       // (GitHub Pages can't serve the Git-LFS video files, so degrade nicely)
