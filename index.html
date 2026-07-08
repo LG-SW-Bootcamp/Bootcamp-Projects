@@ -1,113 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LG SW Bootcamp 2026 — 우수 프로젝트</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <title>LG SW Bootcamp 2026 — 디자인 A/B 비교</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .chooser { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 24px; }
+    .chooser-head { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+    .chooser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 920px; margin: 0 auto; width: 100%; }
+    .choice { display: block; background: var(--white); border: 1px solid var(--hairline); border-radius: 14px; padding: 40px 36px;
+      transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+      box-shadow: 0 12px 40px -26px rgba(38,34,42,0.4); }
+    .choice:hover { transform: translateY(-6px); border-color: var(--red-700); box-shadow: 0 26px 60px -28px rgba(38,34,42,0.5); }
+    .choice .c-tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; color: var(--red-700); text-transform: uppercase; margin-bottom: 18px; }
+    .choice h3 { font-size: 26px; margin-bottom: 12px; }
+    .choice p { color: var(--ink-700); font-size: 15px; line-height: 1.6; margin-bottom: 0; }
+    .choice .c-go { font-family: var(--mono); font-size: 13px; color: var(--red-700); margin-top: 24px; display: inline-block; }
+    @media (max-width: 720px) { .chooser-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-
-  <!-- ===== Header ===== -->
-  <header class="header">
-    <div class="container">
-      <a href="index.html" class="logo">
-        <strong>LG SW Bootcamp</strong>
+  <div class="chooser">
+    <div class="chooser-head">
+      <div class="eyebrow">LG SW BOOTCAMP 2026 · DESIGN REVIEW</div>
+      <h2>디자인 A/B 비교</h2>
+      <p class="section-sub" style="margin:16px auto 0">learnify 에디토리얼 크래프트 × LG 레드 정체성. 공유 시스템 위에 히어로+목록만 두 갈래로 분기했습니다.</p>
+    </div>
+    <div class="chooser-grid">
+      <a class="choice" href="index-a.html">
+        <div class="c-tag">Concept A</div>
+        <h3>갤러리 임팩트</h3>
+        <p>히어로 = 14장 포스터 모자이크 월. 전체 목록도 포스터 썸네일 유지. 임팩트를 <strong>물량·비주얼</strong>로.</p>
+        <span class="c-go">A안 열기 →</span>
       </a>
-
-      <nav class="nav-links" id="nav-links">
-        <a href="#awards">우수 프로젝트</a>
-        <a href="#projects">전체 프로젝트</a>
-        <a href="#stats">통계</a>
-      </nav>
-
-      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="메뉴 열기">☰</button>
+      <a class="choice" href="index-b.html">
+        <div class="c-tag">Concept B</div>
+        <h3>에디토리얼 큐레이션</h3>
+        <p>히어로 = 브라우저 창 속 자동순환 쇼케이스. 전체 목록은 텍스트 디렉토리. 임팩트를 <strong>절제·큐레이션</strong>으로.</p>
+        <span class="c-go">B안 열기 →</span>
+      </a>
     </div>
-  </header>
-
-  <!-- ===== Hero ===== -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="dot"></span>
-          <span id="hero-cohort-badge">13기</span> 프로젝트 발표
-        </div>
-        <h1>LG SW Bootcamp <em>2026</em></h1>
-        <p>LG의 소프트웨어 엔지니어의 미래를 만들어가는 부트캠프의 우수 프로젝트를 만나보세요.</p>
-        <p class="hero-subtext">👉 차세대 SW 인재들의 가능성과 잠재력을 확인할 수 있습니다.</p>
-      </div>
-    </div>
-    <div class="hero-decoration">
-      <div class="element element-1"></div>
-      <div class="element element-2"></div>
-      <div class="element element-3"></div>
-    </div>
-  </section>
-
-  <!-- ===== Awards ===== -->
-  <section class="section award-section" id="awards">
-    <div class="container">
-      <h2 class="section-title reveal">🏆 우수 프로젝트</h2>
-      <div id="award-container"></div>
-    </div>
-  </section>
-
-  <!-- ===== All Projects ===== -->
-  <section class="section" id="projects">
-    <div class="container">
-      <h2 class="section-title reveal">📂 전체 프로젝트</h2>
-      <p class="section-subtitle reveal">부트캠프에서 탄생한 모든 프로젝트</p>
-
-      <div class="filter-bar reveal">
-        <div class="search-wrap">
-          <span class="icon">🔍</span>
-          <input type="text" class="search-input" id="search-input" placeholder="프로젝트명, 팀명, 기술 스택으로 검색…" aria-label="프로젝트 검색">
-        </div>
-        <button class="filter-btn active" data-filter="전체">전체</button>
-        <button class="filter-btn" data-filter="우수 프로젝트">우수 프로젝트</button>
-        <button class="filter-btn" data-filter="A">A반</button>
-        <button class="filter-btn" data-filter="B">B반</button>
-        <button class="filter-btn" data-filter="C">C반</button>
-      </div>
-
-      <div class="card-grid" id="project-grid"></div>
-    </div>
-  </section>
-
-  <!-- ===== Stats ===== -->
-  <section class="section stats-section" id="stats">
-    <div class="container">
-      <h2 class="section-title reveal">📊 부트캠프 통계</h2>
-      <p class="section-subtitle reveal">숫자로 보는 LG SW Bootcamp</p>
-      <div class="stats-grid reveal">
-        <div class="stat-item">
-          <div class="stat-number" id="stat-participants">0</div>
-          <div class="stat-label">참가자 수</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-projects">0</div>
-          <div class="stat-label">프로젝트 수</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-duration">0</div>
-          <div class="stat-label">교육 기간 (주)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Footer ===== -->
-  <footer class="footer">
-    <div class="container">
-      <a href="#">Bootcamp Home</a>
-      <p>© 2026 LG전자 SW공학연구소 SW역량강화팀. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script src="js/data-loader.js"></script>
-  <script src="js/main.js"></script>
+  </div>
 </body>
 </html>

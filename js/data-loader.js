@@ -1,4 +1,4 @@
-// data-loader.js — Fetch & render project data
+// data-loader.js — fetch project data + render helpers for both concepts (A/B)
 
 const DataLoader = (() => {
   let data = null;
@@ -11,94 +11,93 @@ const DataLoader = (() => {
     return data;
   }
 
-  // Resolve a root-relative asset path (e.g. "data/submissions/...") from any page
   function resolveAsset(path) {
     if (!path || /^https?:\/\//.test(path)) return path;
     return location.pathname.includes('/project/') ? `../${path}` : path;
   }
 
-  function getCohort(cohortId) {
-    if (!data) return null;
-    return data.cohorts[cohortId] || null;
-  }
-
-  function getProject(projectId) {
+  function getCohort(id) { return data ? (data.cohorts[id] || null) : null; }
+  function getAllProjects(id) { const c = getCohort(id); return c ? c.projects : []; }
+  function getProject(pid) {
     if (!data) return null;
     for (const c of Object.values(data.cohorts)) {
-      const p = c.projects.find(p => p.id === projectId);
+      const p = c.projects.find(x => x.id === pid);
       if (p) return { ...p, cohort: c };
     }
     return null;
   }
-
-  function getAwardOrder(award) {
-    const order = { '대상': 0, '최우수상': 1, '우수상': 2, '인기상': 3 };
-    return award in order ? order[award] : 4;
+  function getAwardProjects(id) {
+    return getAllProjects(id).filter(p => p.award && p.award !== '');
   }
-
-  function getAwardProjects(cohortId) {
-    const c = getCohort(cohortId);
-    if (!c) return [];
-    return c.projects
-      .filter(p => p.award && p.award !== '')
-      .sort((a, b) => getAwardOrder(a.award) - getAwardOrder(b.award));
-  }
-
-  function getAllProjects(cohortId) {
-    const c = getCohort(cohortId);
-    return c ? c.projects : [];
-  }
-
-  // Group projects by `class` (반). Returns null if projects don't carry a class field.
   function groupByClass(projects) {
-    if (!projects.some(p => p.class)) return null;
-    const groups = {};
-    projects.forEach(p => {
-      const key = p.class || '기타';
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(p);
-    });
-    return Object.keys(groups).sort().map(key => ({ class: key, projects: groups[key] }));
+    const g = {};
+    projects.forEach(p => { const k = p.class || '기타'; (g[k] = g[k] || []).push(p); });
+    return Object.keys(g).sort().map(k => ({
+      cls: k,
+      projects: g[k].slice().sort((a, b) =>
+        (a.team_name || '').localeCompare(b.team_name || '', 'ko', { numeric: true }))
+    }));
   }
 
-  // Render a project card
-  function renderCard(project) {
-    const card = document.createElement('a');
-    card.className = 'card';
-    card.href = `project/detail.html?id=${project.id}`;
-    card.setAttribute('aria-label', `${project.title} 프로젝트 보기`);
+  // "13-A-1" → "13 · A반 1팀" style meta; teamNum from id
+  function teamNum(p) { const m = p.id.match(/-(\d+)$/); return m ? m[1] : ''; }
+  function metaLine(p) { return `${p.id.toUpperCase()} · CLASS ${p.class}`; }
+  function teamMembers(p) {
+    return (p.members && p.members.length)
+      ? `${p.team_name} · ${p.members.join(', ')}`
+      : p.team_name;
+  }
 
-    const awardBadge = project.award
-      ? `<span class="card-award-badge ${project.award === '인기상' ? 'popular' : ''}">${getAwardEmoji(project.award)} ${project.award}</span>`
-      : '';
+  // ---- Concept A: poster grid card ----
+  function renderPosterCard(p) {
+    const a = document.createElement('a');
+    a.className = 'pcard';
+    a.href = `project/detail.html?id=${p.id}`;
+    const award = p.award ? `<span class="pcard-award">◆ ${p.award}</span> · ` : '';
+    a.innerHTML = `
+      <div class="pcard-thumb"><img src="${resolveAsset(p.thumbnail)}" alt="${p.title} 포스터" loading="lazy"></div>
+      <div class="pcard-meta">${metaLine(p)}</div>
+      <h4>${p.title}</h4>
+      <div class="pcard-team">${award}${teamMembers(p)}</div>`;
+    return a;
+  }
 
-    const techs = project.tech_stack.slice(0, 4).map(t => `<span class="card-tech">${t}</span>`).join('');
-    const teamLabel = project.members && project.members.length
-      ? `${project.team_name} (${project.members.join(', ')})`
-      : project.team_name;
-
-    const thumbInner = project.thumbnail
-      ? `<img src="${resolveAsset(project.thumbnail)}" alt="${project.title} 포스터" loading="lazy">`
-      : `<span>📁</span>`;
-
-    card.innerHTML = `
-      <div class="card-thumb">
-        ${awardBadge}
-        ${thumbInner}
+  // ---- Concept B: text directory row ----
+  function renderDirectoryRow(p) {
+    const a = document.createElement('a');
+    a.className = 'dir-row';
+    a.href = `project/detail.html?id=${p.id}`;
+    const award = p.award ? `<span class="dr-award">◆ ${p.award}</span>` : '';
+    a.innerHTML = `
+      <div class="dr-num">${p.id.toUpperCase()}</div>
+      <div class="dir-main">
+        <div class="dr-title">${p.title}</div>
+        <div class="dr-summary">${p.summary}</div>
       </div>
-      <div class="card-body">
-        <h3 class="card-title">${project.title}</h3>
-        <p class="card-team">${teamLabel}</p>
-        <p class="card-summary">${project.summary}</p>
-        <div class="card-techs">${techs}</div>
+      <div class="dir-team">${award}${teamMembers(p)}</div>`;
+    return a;
+  }
+
+  // ---- Featured (award) card — shared by both concepts ----
+  function renderFeaturedCard(p) {
+    const a = document.createElement('a');
+    a.className = 'featured-card';
+    a.href = `project/detail.html?id=${p.id}`;
+    a.innerHTML = `
+      <span class="award-badge">◆ ${p.award}</span>
+      <div class="featured-poster"><img src="${resolveAsset(p.thumbnail)}" alt="${p.title} 포스터" loading="lazy"></div>
+      <div class="featured-body">
+        <div class="f-meta">${metaLine(p)}</div>
+        <h3>${p.title}</h3>
+        <div class="f-team">${teamMembers(p)}</div>
+        <div class="f-summary">${p.summary}</div>
       </div>`;
-    return card;
+    return a;
   }
 
-  function getAwardEmoji(award) {
-    const map = { '대상': '🏆', '최우수상': '🥈', '우수상': '🥉', '인기상': '⭐', '우수 프로젝트': '🏆' };
-    return map[award] || '';
-  }
-
-  return { load, getCohort, getProject, getAwardProjects, getAllProjects, groupByClass, renderCard, getAwardEmoji, resolveAsset };
+  return {
+    load, resolveAsset, getCohort, getAllProjects, getProject, getAwardProjects,
+    groupByClass, teamNum, metaLine, teamMembers,
+    renderPosterCard, renderDirectoryRow, renderFeaturedCard,
+  };
 })();

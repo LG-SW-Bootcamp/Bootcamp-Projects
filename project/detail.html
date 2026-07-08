@@ -1,165 +1,140 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
   <title>프로젝트 상세 — LG SW Bootcamp 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
+  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <a href="../index.html" class="logo">
-        <strong>LG SW Bootcamp</strong>
-      </a>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo"><strong>LG SW Bootcamp</strong><small>2026 · 13기</small></a>
       <nav class="nav-links" id="nav-links">
-        <a href="../index.html#awards">우수 프로젝트</a>
-        <a href="../index.html#projects">전체 프로젝트</a>
+        <a href="../index.html">← 목록</a>
       </nav>
-      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="메뉴 열기">☰</button>
     </div>
-  </header>
+  </nav>
 
-  <!-- Detail Hero -->
-  <section class="detail-hero" id="detail-hero">
-    <div class="container">
-      <a href="../index.html" class="detail-back">← 목록으로 돌아가기</a>
+  <section class="detail-hero">
+    <div class="container-wide">
+      <a href="../index.html" class="detail-back" id="detail-back">← 목록으로 돌아가기</a>
+      <div class="detail-eyebrow" id="detail-eyebrow"></div>
       <div id="detail-award"></div>
       <h1 class="detail-title" id="detail-title">로딩 중…</h1>
       <p class="detail-team" id="detail-team"></p>
     </div>
   </section>
 
-  <!-- Detail Body -->
   <section class="detail-body">
-    <div class="container">
+    <div class="container-wide">
       <div class="detail-grid">
         <div>
           <div class="detail-poster-wrap" id="detail-poster-wrap" style="display:none">
-            <img id="detail-poster" alt="프로젝트 포스터" style="width:100%;border-radius:var(--radius);border:1px solid var(--border)">
+            <img id="detail-poster" alt="프로젝트 포스터" />
           </div>
-          <div class="detail-video-wrap" id="detail-video-wrap" style="display:none">
-            <video id="detail-video" controls style="width:100%;border-radius:var(--radius);background:#000">
-              브라우저가 이 동영상 형식을 지원하지 않습니다. 아래 링크에서 다운로드해 주세요.
-            </video>
+          <div class="video-frame" id="detail-video-wrap" style="display:none">
+            <div class="win-chrome"><span class="traffic r"></span><span class="traffic y"></span><span class="traffic g"></span><span class="url">demo</span></div>
+            <video id="detail-video" controls>브라우저가 이 동영상 형식을 지원하지 않습니다.</video>
           </div>
+
           <p class="detail-desc" id="detail-desc"></p>
 
-          <div class="detail-tech-highlights" id="detail-tech-highlights-block" style="display:none">
-            <h3 class="detail-subheading">핵심 기술</h3>
-            <ul class="tech-highlights-list" id="detail-tech-highlights"></ul>
+          <div id="detail-tech-block" style="display:none">
+            <div class="detail-subhead">핵심 기술</div>
+            <ul class="tech-list" id="detail-tech"></ul>
           </div>
 
           <div class="detail-nav" id="detail-nav"></div>
         </div>
-        <aside class="detail-sidebar">
+
+        <aside class="detail-side">
           <div class="info-block" id="detail-members-block">
-            <div class="info-label">팀원</div>
-            <div class="members-list" id="detail-members"></div>
-          </div>
-          <div class="info-block" id="detail-techs-block">
-            <div class="info-label">기술 스택</div>
-            <div class="tech-list" id="detail-techs"></div>
+            <div class="info-label">Team</div>
+            <div class="members" id="detail-members"></div>
           </div>
           <div class="info-block">
-            <div class="info-label">자료</div>
-            <div class="link-list" id="detail-links"></div>
+            <div class="info-label">Materials</div>
+            <div class="links" id="detail-links"></div>
           </div>
         </aside>
       </div>
     </div>
   </section>
 
-  <footer class="footer">
-    <div class="container">
-      <a href="../index.html">Bootcamp Home</a>
-      <p>© 2026 LG전자 SW공학연구소 SW역량강화팀. All rights reserved.</p>
-    </div>
+  <footer>
+    <div class="copyright">LG ELECTRONICS · SW COLLEGE — BOOTCAMP 2026 · 13기</div>
   </footer>
 
   <script src="../js/data-loader.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const data = await DataLoader.load();
-      const params = new URLSearchParams(location.search);
-      const id = params.get('id');
+      await DataLoader.load();
+      const id = new URLSearchParams(location.search).get('id');
       if (!id) { location.href = '../index.html'; return; }
-
-      const result = DataLoader.getProject(id);
-      if (!result) { document.getElementById('detail-title').textContent = '프로젝트를 찾을 수 없습니다.'; return; }
-
-      const p = result;
-      const cohort = result.cohort;
+      const p = DataLoader.getProject(id);
+      if (!p) { document.getElementById('detail-title').textContent = '프로젝트를 찾을 수 없습니다.'; return; }
+      const cohort = p.cohort;
 
       document.title = `${p.title} — LG SW Bootcamp 2026`;
+      document.getElementById('detail-eyebrow').textContent = DataLoader.metaLine(p);
       document.getElementById('detail-title').textContent = p.title;
-      document.getElementById('detail-team').textContent = `${p.team_name} · ${cohort.name}`;
-      document.getElementById('detail-desc').textContent = p.description;
+      document.getElementById('detail-team').textContent = DataLoader.teamMembers(p);
+      document.getElementById('detail-desc').textContent = p.description || p.summary || '';
 
       if (p.award) {
-        document.getElementById('detail-award').innerHTML = `<span class="detail-award">${DataLoader.getAwardEmoji(p.award)} ${p.award}</span>`;
+        document.getElementById('detail-award').innerHTML = `<span class="detail-award-badge">◆ ${p.award}</span>`;
       }
 
-      const membersBlock = document.getElementById('detail-members-block');
+      // return to referring list if we came from one
+      const back = document.getElementById('detail-back');
+      if (document.referrer && document.referrer.includes(location.host)) {
+        back.addEventListener('click', e => { e.preventDefault(); history.back(); });
+      }
+
+      // members
+      const mBlock = document.getElementById('detail-members-block');
       if (p.members && p.members.length) {
-        document.getElementById('detail-members').innerHTML = p.members.map(m => `<span class="member-tag">${m}</span>`).join('');
-      } else {
-        membersBlock.style.display = 'none';
-      }
+        document.getElementById('detail-members').innerHTML = p.members.map(m => `<span class="member">${m}</span>`).join('');
+      } else { mBlock.style.display = 'none'; }
 
-      const techsBlock = document.getElementById('detail-techs-block');
-      if (p.tech_stack && p.tech_stack.length) {
-        document.getElementById('detail-techs').innerHTML = p.tech_stack.map(t => `<span class="card-tech">${t}</span>`).join('');
-      } else {
-        techsBlock.style.display = 'none';
-      }
-
-      const techHighlightsBlock = document.getElementById('detail-tech-highlights-block');
+      // core tech
       if (p.tech_highlights && p.tech_highlights.length) {
-        document.getElementById('detail-tech-highlights').innerHTML = p.tech_highlights.map(t => `<li>${t}</li>`).join('');
-        techHighlightsBlock.style.display = 'block';
+        document.getElementById('detail-tech').innerHTML = p.tech_highlights.map(t => `<li>${t}</li>`).join('');
+        document.getElementById('detail-tech-block').style.display = 'block';
       }
 
-      const linkLabels = {
-        github: '🔗 GitHub', demo: '🌐 Demo', video: '🎬 시연 영상',
-        spec: '📄 요구사항 명세서', report: '📑 결과보고서', poster: '🖼️ 포스터'
-      };
-      const links = Object.entries(p.links).filter(([k,v]) => v && k !== 'poster_image')
-        .map(([k,v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" class="link-item">${linkLabels[k] || k}</a>`).join('');
-      document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--text-secondary);font-size:.85rem">자료 없음</span>';
+      // materials
+      const labels = { spec: '요구사항 명세서', video: '시연 영상', report: '결과보고서', poster: '포스터', github: 'GitHub', demo: 'Demo' };
+      const links = Object.entries(p.links).filter(([k, v]) => v && k !== 'poster_image')
+        .map(([k, v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" rel="noopener" class="link-item">${labels[k] || k} <span style="margin-left:auto;color:var(--ink-500)">↗</span></a>`).join('');
+      document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--ink-500);font-size:14px">자료 없음</span>';
 
-      // Poster image preview
+      // poster
       if (p.links.poster_image) {
         document.getElementById('detail-poster').src = DataLoader.resolveAsset(p.links.poster_image);
         document.getElementById('detail-poster-wrap').style.display = 'block';
       }
-
-      // Video preview
+      // video (framed in browser chrome)
       if (p.links.video) {
-        const videoEl = document.getElementById('detail-video');
-        videoEl.src = DataLoader.resolveAsset(p.links.video);
+        document.getElementById('detail-video').src = DataLoader.resolveAsset(p.links.video);
         document.getElementById('detail-video-wrap').style.display = 'block';
       }
 
-      // Prev / Next nav
-      const allProjects = cohort.projects;
-      const idx = allProjects.findIndex(x => x.id === id);
-      const prev = idx > 0 ? allProjects[idx - 1] : null;
-      const next = idx < allProjects.length - 1 ? allProjects[idx + 1] : null;
-      let navHtml = '';
-      if (prev) navHtml += `<a href="detail.html?id=${prev.id}"><span>← 이전</span><strong>${prev.title}</strong></a>`;
-      else navHtml += '<span></span>';
-      if (next) navHtml += `<a href="detail.html?id=${next.id}" style="text-align:right"><span>다음 →</span><strong>${next.title}</strong></a>`;
-      document.getElementById('detail-nav').innerHTML = navHtml;
-
-      // Mobile menu
-      const mobileBtn = document.getElementById('mobile-menu-btn');
-      const navLinksEl = document.getElementById('nav-links');
-      if (mobileBtn) mobileBtn.addEventListener('click', () => navLinksEl.classList.toggle('open'));
+      // prev / next within cohort
+      const list = cohort.projects;
+      const i = list.findIndex(x => x.id === id);
+      const prev = i > 0 ? list[i - 1] : null;
+      const next = i < list.length - 1 ? list[i + 1] : null;
+      let nav = prev ? `<a href="detail.html?id=${prev.id}"><span>← 이전</span><strong>${prev.title}</strong></a>` : '<span></span>';
+      if (next) nav += `<a href="detail.html?id=${next.id}" style="text-align:right"><span>다음 →</span><strong>${next.title}</strong></a>`;
+      document.getElementById('detail-nav').innerHTML = nav;
     });
   </script>
 </body>
