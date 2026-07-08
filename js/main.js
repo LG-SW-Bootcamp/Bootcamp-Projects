@@ -142,22 +142,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // --- Theme toggle ---
-  const themeBtn = document.getElementById('theme-toggle');
-  if (themeBtn) {
-    const saved = localStorage.getItem('theme');
-    if (saved) document.documentElement.setAttribute('data-theme', saved);
-
-    themeBtn.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const next = isDark ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      themeBtn.textContent = isDark ? '🌙' : '☀️';
-    });
-    themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-  }
-
   // --- Mobile menu ---
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const navLinks = document.getElementById('nav-links');

@@ -13,12 +13,13 @@
   <!-- Header -->
   <header class="header">
     <div class="container">
-      <a href="../index.html" class="logo">LG SW <span>Bootcamp</span></a>
+      <a href="../index.html" class="logo">
+        <strong>LG SW Bootcamp</strong>
+      </a>
       <nav class="nav-links" id="nav-links">
         <a href="../index.html#awards">우수 프로젝트</a>
         <a href="../index.html#projects">전체 프로젝트</a>
       </nav>
-      <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">🌙</button>
       <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="메뉴 열기">☰</button>
     </div>
   </header>
@@ -154,19 +155,6 @@
       else navHtml += '<span></span>';
       if (next) navHtml += `<a href="detail.html?id=${next.id}" style="text-align:right"><span>다음 →</span><strong>${next.title}</strong></a>`;
       document.getElementById('detail-nav').innerHTML = navHtml;
-
-      // Theme
-      const themeBtn = document.getElementById('theme-toggle');
-      const saved = localStorage.getItem('theme');
-      if (saved) document.documentElement.setAttribute('data-theme', saved);
-      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-      themeBtn.addEventListener('click', () => {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const next = isDark ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-        themeBtn.textContent = isDark ? '🌙' : '☀️';
-      });
 
       // Mobile menu
       const mobileBtn = document.getElementById('mobile-menu-btn');
