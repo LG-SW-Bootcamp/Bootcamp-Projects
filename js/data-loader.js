@@ -77,10 +77,14 @@ const DataLoader = (() => {
       ? `${project.team_name} (${project.members.join(', ')})`
       : project.team_name;
 
+    const thumbInner = project.thumbnail
+      ? `<img src="${resolveAsset(project.thumbnail)}" alt="${project.title} 포스터" loading="lazy">`
+      : `<span>📁</span>`;
+
     card.innerHTML = `
       <div class="card-thumb">
         ${awardBadge}
-        <span>📁</span>
+        ${thumbInner}
       </div>
       <div class="card-body">
         <h3 class="card-title">${project.title}</h3>

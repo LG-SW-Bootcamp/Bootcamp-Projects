@@ -31,7 +31,7 @@
             "poster": "data/submissions/A반/1팀/LG_부트캠프_13기_A반_포스터(1팀).pptx",
             "poster_image": "data/posters/A_1.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/A_1.png",
           "tech_highlights": [
             "llama.cpp + Gemma-4-E2B (GGUF 양자화) 로컬 추론",
             "만세력 직접 계산 + JSON 스키마 출력 제한",
@@ -61,7 +61,7 @@
             "poster": "data/submissions/A반/2팀/LG_부트캠프_13기_A반_포스터(2팀).pdf",
             "poster_image": "data/posters/A_2.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/A_2.png",
           "tech_highlights": [
             "STT: faster-whisper",
             "LLM: Qwen3 30B 분산 추론 (Tensor Parallelism, 10~12 TPS)",
@@ -91,7 +91,7 @@
             "poster": "data/submissions/A반/3팀/LG_부트캠프_13기_A반_포스터(3팀).pptx",
             "poster_image": "data/posters/A_3.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/A_3.png",
           "tech_highlights": [
             "MediaPipe Pose 3인 포즈 인식",
             "관절 각도 벡터 코사인 유사도 채점 알고리즘",
@@ -120,7 +120,7 @@
             "poster": "data/submissions/A반/4팀/LG_부트캠프_13기_A반_포스터(4팀).pptx",
             "poster_image": "data/posters/A_4.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/A_4.png",
           "tech_highlights": [
             "MediaPipe Pose/Hand 규칙 기반 제스처 제어",
             "Whisper.cpp STT + Qwen3-4B 음성 명령 인식",
@@ -149,7 +149,7 @@
             "poster": "data/submissions/A반/5팀/LG_부트캠프_13기_A반_포스터(5팀).pptx",
             "poster_image": "data/posters/A_5.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/A_5.png",
           "tech_highlights": [
             "MoveNet + MediaPipe Hand 동작 인식",
             "유선 스위치 허브 + 고정 IP (100ms 지연, 4인 동시)",
@@ -178,7 +178,7 @@
             "poster": "data/submissions/B반/1팀/LG_부트캠프_13기_B반_포스터(1팀).pptx",
             "poster_image": "data/posters/B_1.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/B_1.png",
           "tech_highlights": [
             "표정 인식: MediaPipe Face Landmarker + FaceMesh 앙상블",
             "한숨 인식: YAMNet TFLite 실시간 추론",
@@ -208,7 +208,7 @@
             "poster": "data/submissions/B반/2팀/LG_부트캠프_13기_B반_포스터(2팀).pptx",
             "poster_image": "data/posters/B_2.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/B_2.png",
           "tech_highlights": [
             "CLIP 임베딩 + Outfit-Graph Vector DB 코디 추천",
             "On-device/Cloud VTON 게이트 라우팅 (MobileVTON ↔ FASHN v1.6)",
@@ -237,7 +237,7 @@
             "poster": "data/submissions/B반/3팀/LG_부트캠프_13기_B반_포스터(3팀).pptx",
             "poster_image": "data/posters/B_3.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/B_3.png",
           "tech_highlights": [
             "에이전트 엔진 (센서 데이터 → 맥락 조립)",
             "VLM: Qwen 9B (Thor 보드)",
@@ -265,7 +265,7 @@
             "poster": "data/submissions/B반/4팀/LG_부트캠프_13기_B반_포스터(4팀).pptx",
             "poster_image": "data/posters/B_4.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/B_4.png",
           "tech_highlights": [
             "MediaPipe Pose + YAML 규칙 채점 엔진",
             "개인별 ROM 보정 + 비전 체형 분석",
@@ -293,7 +293,7 @@
             "poster": "data/submissions/B반/5팀/LG_부트캠프_13기_B반_포스터(5팀).pptx",
             "poster_image": "data/posters/B_5.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/B_5.png",
           "tech_highlights": [
             "1Hz mmWave 레이더 비영상 센싱",
             "3초 윈도우 통계 피처 엔지니어링",
@@ -323,7 +323,7 @@
             "poster": "data/submissions/C반/1팀/LG_부트캠프_13기_C반_포스터(1팀).pptx",
             "poster_image": "data/posters/C_1.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/C_1.png",
           "tech_highlights": [
             "Tauri 2 (Rust) + React 크로스 플랫폼 앱",
             "OS별 접근성 API 텍스트 캡처/자동 삽입",
@@ -352,7 +352,7 @@
             "poster": "data/submissions/C반/2팀/LG_부트캠프_13기_C반_포스터(2팀).pptx",
             "poster_image": "data/posters/C_2.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/C_2.png",
           "tech_highlights": [
             "복잡한 표 Placeholder 마스킹 전처리",
             "비전 LLM key-value 쌍 추출",
@@ -382,7 +382,7 @@
             "poster": "data/submissions/C반/3팀/LG_부트캠프_13기_C반_포스터(3팀).pptx",
             "poster_image": "data/posters/C_3.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/C_3.png",
           "tech_highlights": [
             "임베딩 + pgvector 유사도 검색",
             "RAG 융합 검색 (벡터 + 키워드 RRF + 날짜 부스트)",
@@ -412,7 +412,7 @@
             "poster": "data/submissions/C반/4팀/LG_부트캠프_13기_C반_포스터(4팀).pptx",
             "poster_image": "data/posters/C_4.png"
           },
-          "thumbnail": "",
+          "thumbnail": "data/posters/C_4.png",
           "tech_highlights": [
             "LLM 프롬프트 정제",
             "Chroma 벡터 DB 유사 템플릿 검색 (Top-20)",
