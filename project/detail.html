@@ -119,8 +119,12 @@
 
       // materials
       const labels = { spec: '요구사항 명세서', video: '시연 영상', report: '결과보고서', poster: '포스터', github: 'GitHub', demo: 'Demo' };
-      const links = Object.entries(p.links).filter(([k, v]) => v && k !== 'poster_image' && k !== 'poster_images')
-        .map(([k, v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" rel="noopener" class="link-item">${labels[k] || k} <span style="margin-left:auto;color:var(--ink-500)">↗</span></a>`).join('');
+      const skip = new Set(['poster_image', 'poster_images', 'video_url']);
+      const links = Object.entries(p.links).filter(([k, v]) => v && !skip.has(k))
+        .map(([k, v]) => {
+          const href = (k === 'video' && p.links.video_url) ? p.links.video_url : DataLoader.resolveAsset(v);
+          return `<a href="${href}" target="_blank" rel="noopener" class="link-item">${labels[k] || k} <span style="margin-left:auto;color:var(--ink-500)">↗</span></a>`;
+        }).join('');
       document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--ink-500);font-size:14px">자료 없음</span>';
 
       // poster(s) — show every page, click to enlarge
@@ -143,7 +147,7 @@
       if (p.links.video) {
         const vwrap = document.getElementById('detail-video-wrap');
         const vid = document.getElementById('detail-video');
-        vid.src = DataLoader.resolveAsset(p.links.video);
+        vid.src = p.links.video_url || DataLoader.resolveAsset(p.links.video);
         vwrap.style.display = 'block';
         vid.addEventListener('error', () => {
           vwrap.innerHTML = '<div class="video-fallback">⚠️ 이 환경에서는 시연 영상을 재생할 수 없습니다.<br>포스터로 프로젝트를 확인하시거나, 전체 영상은 자체 호스팅 사이트에서 재생됩니다.</div>';
