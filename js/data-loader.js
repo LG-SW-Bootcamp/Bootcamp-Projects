@@ -6,7 +6,7 @@ const DataLoader = (() => {
   async function load() {
     if (data) return data;
     const base = location.pathname.includes('/project/') ? '../data/projects.json' : 'data/projects.json';
-    const res = await fetch(base);
+    const res = await fetch(base, { cache: 'no-store' });
     data = await res.json();
     return data;
   }
