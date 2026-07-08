@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (e.isIntersecting) {
           setNum('stat-participants', s.participants);
           setNum('stat-projects', s.projects);
-          setNum('stat-duration', s.duration_weeks);
+          setNum('stat-duration', s.duration_days);
           io.disconnect();
         }
       }), { threshold: 0.3 });
@@ -139,6 +139,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (e.isIntersecting) { e.target.classList.add('in-view'); fo.unobserve(e.target); }
   }), { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
   document.querySelectorAll('.fade-up').forEach(el => fo.observe(el));
+
+  // ---- FILM: click-to-play YouTube (launch show & closing ceremony) ----
+  const filmPlayer = document.getElementById('film-player');
+  if (filmPlayer) {
+    filmPlayer.addEventListener('click', () => {
+      const id = filmPlayer.dataset.youtube;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.title = '런칭쇼 & 수료식 영상';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      filmPlayer.replaceWith(iframe);
+    });
+  }
 
   // ---- mobile nav ----
   const mob = document.getElementById('nav-mobile'), links = document.getElementById('nav-links');
