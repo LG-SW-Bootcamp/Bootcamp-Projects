@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="../css/style.css?v=7" />
+  <link rel="stylesheet" href="../css/style.css?v=8" />
 </head>
 <body>
 
@@ -66,6 +66,15 @@
     </div>
   </section>
 
+  <!-- Lightbox (poster enlarge) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lb-close" id="lb-close" aria-label="닫기">×</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="이전 포스터">‹</button>
+    <img class="lb-img" id="lb-img" alt="포스터 확대 이미지" />
+    <button class="lb-nav lb-next" id="lb-next" aria-label="다음 포스터">›</button>
+    <div class="lb-count" id="lb-count"></div>
+  </div>
+
   <footer>
     <div class="copyright">LG ELECTRONICS · SW COLLEGE — BOOTCAMP 2026 · 13기</div>
   </footer>
@@ -114,18 +123,20 @@
         .map(([k, v]) => `<a href="${DataLoader.resolveAsset(v)}" target="_blank" rel="noopener" class="link-item">${labels[k] || k} <span style="margin-left:auto;color:var(--ink-500)">↗</span></a>`).join('');
       document.getElementById('detail-links').innerHTML = links || '<span style="color:var(--ink-500);font-size:14px">자료 없음</span>';
 
-      // poster(s) — show every page
+      // poster(s) — show every page, click to enlarge
       const posters = (p.links.poster_images && p.links.poster_images.length)
         ? p.links.poster_images
         : (p.links.poster_image ? [p.links.poster_image] : []);
+      const lbSrcs = posters.map(s => DataLoader.resolveAsset(s));
       if (posters.length) {
         const wrap = document.getElementById('detail-poster-wrap');
         wrap.innerHTML = posters.map((src, i) => {
           const label = posters.length > 1
             ? `<div class="poster-pageno">${String(i + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}</div>` : '';
-          return `${label}<img class="detail-poster-img" src="${DataLoader.resolveAsset(src)}" alt="${p.title} 포스터 ${i + 1}" loading="lazy">`;
+          return `${label}<img class="detail-poster-img" src="${lbSrcs[i]}" alt="${p.title} 포스터 ${i + 1}" loading="lazy">`;
         }).join('');
         wrap.style.display = 'block';
+        wrap.querySelectorAll('.detail-poster-img').forEach((im, i) => im.addEventListener('click', () => openLightbox(i)));
       }
       // video (framed in browser chrome) — with graceful fallback
       // (GitHub Pages can't serve the Git-LFS video files, so degrade nicely)
@@ -147,6 +158,42 @@
       let nav = prev ? `<a href="detail.html?id=${prev.id}"><span>← 이전</span><strong>${prev.title}</strong></a>` : '<span></span>';
       if (next) nav += `<a href="detail.html?id=${next.id}" style="text-align:right"><span>다음 →</span><strong>${next.title}</strong></a>`;
       document.getElementById('detail-nav').innerHTML = nav;
+
+      // ---- Lightbox: click a poster to enlarge ----
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lb-img');
+      const lbCount = document.getElementById('lb-count');
+      const lbPrev = document.getElementById('lb-prev');
+      const lbNext = document.getElementById('lb-next');
+      let lbIdx = 0;
+      function lbShow() {
+        lbImg.src = lbSrcs[lbIdx];
+        const multi = lbSrcs.length > 1;
+        lbCount.textContent = multi ? `${lbIdx + 1} / ${lbSrcs.length}` : '';
+        lbPrev.style.display = lbNext.style.display = multi ? 'flex' : 'none';
+      }
+      function openLightbox(idx) {
+        lbIdx = idx; lbShow();
+        lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLightbox() {
+        lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = ''; lbImg.removeAttribute('src');
+      }
+      function lbMove(d) { lbIdx = (lbIdx + d + lbSrcs.length) % lbSrcs.length; lbShow(); }
+      window.openLightbox = openLightbox; // used by poster click handlers above
+      lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+      lbImg.addEventListener('click', e => e.stopPropagation());
+      document.getElementById('lb-close').addEventListener('click', closeLightbox);
+      lbPrev.addEventListener('click', e => { e.stopPropagation(); lbMove(-1); });
+      lbNext.addEventListener('click', e => { e.stopPropagation(); lbMove(1); });
+      document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft') lbMove(-1);
+        else if (e.key === 'ArrowRight') lbMove(1);
+      });
     });
   </script>
 </body>
