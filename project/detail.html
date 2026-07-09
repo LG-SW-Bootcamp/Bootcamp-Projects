@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" />
-  <link rel="stylesheet" href="../css/style.css?v=9" />
+  <link rel="stylesheet" href="../css/style.css?v=10" />
 </head>
 <body>
 
@@ -157,9 +157,9 @@
         wrap.innerHTML = posters.map((src, i) => {
           const label = posters.length > 1
             ? `<div class="poster-pageno">${String(i + 1).padStart(2, '0')} / ${String(posters.length).padStart(2, '0')}</div>` : '';
-          return `${label}<img class="detail-poster-img" src="${lbSrcs[i]}" alt="${p.title} 포스터 ${i + 1}" loading="lazy">`;
+          return `<div class="poster-cell">${label}<img class="detail-poster-img" src="${lbSrcs[i]}" alt="${p.title} 포스터 ${i + 1}" loading="lazy"></div>`;
         }).join('');
-        wrap.style.display = 'block';
+        wrap.style.display = 'grid';
         wrap.querySelectorAll('.detail-poster-img').forEach((im, i) => im.addEventListener('click', () => openLightbox(i)));
       }
       // video (framed in browser chrome) — with graceful fallback
