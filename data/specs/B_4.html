@@ -1,0 +1,333 @@
+<h1>LG 부트캠프 13기 B반 요구사항 명세서 (4팀)</h1>
+<p><strong>프로젝트명:</strong> 방구석 트레이너 (Room Trainer) — 로컬 AI 홈 피트니스 코치</p>
+<p>별도 웨어러블 기기 없이 브라우저 카메라만으로 운동 자세를 실시간 분석하고, 반복 횟수·자세 점수·피드백·체형 분석·맞춤 코스·AI 코칭을 제공하는 홈 피트니스 코칭 애플리케이션이다. 라즈베리파이 또는 일반 PC/Mac에서 로컬로 동작하도록 설계되었다.</p>
+<hr />
+<h2>시연 타임스탬프 기입 안내</h2>
+<ul>
+<li>아래 표의 시연 타임스탬프는 <strong>시연 영상 녹화 후 실제 시각으로 채워야 한다.</strong> (현재 <code>⏳</code>로 표기된 행은 미기입 상태)</li>
+<li>영상으로 보여줄 수 없는 요구사항(내부 동작·성능·운영 환경 등)은 <code>N/A (사유)</code>로 표기한다.</li>
+<li>비어 있는 칸은 평가 시 <strong>시연 미입증</strong>으로 처리된다.</li>
+</ul>
+<hr />
+<h2>요구사항 목록</h2>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>요구사항 내용</th>
+<th>검증 기준 (완료 조건)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td>이름·사번 입력만으로 앱에 입장한다 (별도 비밀번호 없음)</td>
+<td>이름·사번 입력 후 메인 화면으로 진입하고, 동일 사번 재입장 시 기존 사용자로 인식된다</td>
+<td>0:00:07</td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>운동 화면에서 브라우저 웹캠 영상이 실시간으로 표시된다</td>
+<td>카메라 권한 허용 후 브라우저에 끊김 없이 영상 피드가 보인다</td>
+<td>0:01:43</td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>웹캠 영상에서 신체 관절(랜드마크)을 실시간으로 추출한다</td>
+<td>MediaPipe Pose 스켈레톤이 사용자 동작을 따라 화면에 겹쳐 표시된다</td>
+<td>0:00:41</td>
+</tr>
+<tr>
+<td>R-04</td>
+<td>스쿼트·푸시업·플랭크 자세를 서버 채점 엔진이 실시간으로 채점한다</td>
+<td>운동 중 자세를 실시간으로 채점하여 피드백이 갱신되어 화면에 표시된다</td>
+<td>0:01:45</td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>운동별 채점 규칙은 YAML 규칙 파일로 정의되어 서버에서 적용된다</td>
+<td><code>exercises/rules/*.yaml</code>의 커브·가중치 변경이 채점 결과에 반영된다 (테스트로 검증)</td>
+<td>N/A (서버 내부 규칙 — 영상 미시연, 테스트로 대체)</td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>반복 동작을 자동으로 카운트한다</td>
+<td>정해진 운동을 N회 수행하면 화면의 반복 횟수가 N으로 집계된다</td>
+<td>0:01:45</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td>한 세트가 끝나면 직후 피드백 문구를 제공한다</td>
+<td>세트 종료 직후 자세 교정·격려 피드백 텍스트가 표시된다</td>
+<td>0:01:55</td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>잘못된/노이즈 랜드마크는 품질 게이트로 걸러 오채점을 방지한다</td>
+<td>신뢰도 낮은 프레임은 채점에서 제외되어 비정상 점수가 발생하지 않는다 (테스트로 검증)</td>
+<td>N/A (내부 품질 게이트 — 테스트로 대체)</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>체형 분석으로 어깨·골반·척추 기울기·거북목 등 자세 지표를 산출한다</td>
+<td>정면/측면 촬영 후 각 지표 수치와 자세 점수·자세 나이·요약이 표시된다</td>
+<td>0:00:59</td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>체형 분석 결과를 저장하고 최신 결과를 다시 불러올 수 있다</td>
+<td>분석 저장 후 재방문 시 최신 분석 결과가 조회된다</td>
+<td>0:01:07</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>목표·강도·부상 부위를 기반으로 맞춤 운동 코스를 생성한다</td>
+<td>입력 조건에 맞는 운동 플랜이 생성되어 목록에 추가된다</td>
+<td>0:01:19</td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>생성한 코스를 조회·삭제할 수 있다</td>
+<td>코스 목록에서 생성된 코스가 보이고 삭제 시 목록에서 사라진다</td>
+<td>0:01:25</td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>신체 프로필을 입력·수정할 수 있다</td>
+<td>프로필 저장 후 값이 유지되고 코스·채점 개인화에 반영된다</td>
+<td>0:00:30</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>부상 이력(injury)을 등록·해제할 수 있다</td>
+<td>부상 등록 시 해당 부위가 코스 생성에서 회피되고, 해제 시 다시 포함된다</td>
+<td>0:00:33</td>
+</tr>
+<tr>
+<td>R-15</td>
+<td>개인 가동범위(personal ROM) 보정값을 저장해 채점에 반영한다</td>
+<td>개인 ROM 저장 후 동일 동작의 채점 기준이 개인값에 맞게 보정된다 (테스트로 검증)</td>
+<td>N/A (개인화 보정 내부 동작 — 테스트로 대체)</td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>자유 운동(free)·학습(learn) 모드로 운동 세션을 진행한다</td>
+<td>운동 코드별 세션이 시작되고 세트 기록 후 결과 화면이 표시된다</td>
+<td>0:01:33</td>
+</tr>
+<tr>
+<td>R-17</td>
+<td>운동 세션 종료 후 결과(반복·점수·소요)를 요약해 보여준다</td>
+<td>세션 종료 시 결과 페이지에 세트별 기록과 요약 점수가 표시된다</td>
+<td>0:01:54</td>
+</tr>
+<tr>
+<td>R-18</td>
+<td>운동 히스토리와 히트맵으로 누적 기록을 조회한다</td>
+<td>운동 누적 기록이 통계·히트맵으로 시각화되어 표시된다</td>
+<td>0:02:18</td>
+</tr>
+<tr>
+<td>R-19</td>
+<td>누적 운동 데이터로 장기 성장 리포트(AI 코칭)를 생성한다</td>
+<td>히스토리 트렌드 분석 + 코치 코멘트가 정해진 JSON 스키마로 생성되어 표시된다</td>
+<td>0:02:02</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td>일일·주간 퀘스트와 포인트·티어로 게이미피케이션을 제공한다</td>
+<td>운동 수행 시 퀘스트가 완료·보상 수령되고 포인트/티어가 갱신된다</td>
+<td>0:02:26</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td>코치 피드백을 음성(TTS)으로 안내한다</td>
+<td>피드백 텍스트가 음성으로 재생된다</td>
+<td>0:01:50</td>
+</tr>
+<tr>
+<td>R-22</td>
+<td><code>/voice</code> 페이지에서 음성으로 AI 상담을 진행한다 (ASR→LLM→TTS)</td>
+<td>마이크 발화 후 음성 답변이 재생되고 단계별 SSE(asr/llm/tts)가 스트리밍된다</td>
+<td>0:02:40</td>
+</tr>
+<tr>
+<td>R-23</td>
+<td>음성 에이전트 서버 호출은 백엔드가 서버 사이드로 프록시한다 (CORS 회피)</td>
+<td>브라우저는 음성 서버를 직접 호출하지 않고 <code>/api/voice/*</code>로만 통신한다</td>
+<td>N/A (서버 내부 프록시 — 영상 미시연)</td>
+</tr>
+<tr>
+<td>R-24</td>
+<td>관리자 화면에서 운동 카탈로그를 등록·수정·삭제한다</td>
+<td><code>/admin</code>에서 운동 항목 CRUD가 동작하고 카탈로그에 반영된다</td>
+<td>0:02:58</td>
+</tr>
+<tr>
+<td>R-25</td>
+<td>모든 사용자/운동/기록 데이터를 SQLite에 영구 저장한다</td>
+<td>앱 재시작 후에도 사용자·세션·기록이 유지된다</td>
+<td>0:00:08</td>
+</tr>
+<tr>
+<td>R-26</td>
+<td>자연어 생성(LLM)은 로컬 Transformer를 쓰되, 모델이 없으면 템플릿으로 폴백한다</td>
+<td>모델 미설치 환경에서도 리포트·피드백이 결정론적 템플릿으로 정상 생성된다</td>
+<td>N/A (폴백 동작 — 영상 미시연, 테스트로 대체)</td>
+</tr>
+<tr>
+<td>R-27</td>
+<td>자세 판단(규칙 엔진)과 자연어 설명(LLM)의 권한을 분리한다</td>
+<td>점수/판정은 규칙 엔진만 결정하고 LLM은 설명만 담당한다 (테스트로 검증)</td>
+<td>N/A (아키텍처 제약 — 테스트로 대체)</td>
+</tr>
+<tr>
+<td>R-28</td>
+<td>웨어러블 기기 없이 브라우저 카메라만으로 동작한다</td>
+<td>추가 센서/기기 없이 웹캠만으로 전 기능이 동작한다</td>
+<td>0:00:41</td>
+</tr>
+<tr>
+<td>R-29</td>
+<td>라즈베리파이/일반 PC에서 로컬로 설치·실행된다</td>
+<td><code>npm install &amp;&amp; npm start</code> 후 <code>http://localhost:3000</code> 접속이 가능하다</td>
+<td>N/A (실행 환경 — RUN.md로 입증)</td>
+</tr>
+<tr>
+<td>R-30</td>
+<td>의료 진단이 아님을 알리는 안전 고지를 제공한다</td>
+<td>화면에 운동 보조·자세 코칭 도구임을 알리는 안전 고지 문구가 표시된다</td>
+<td>0:00:00</td>
+</tr>
+<tr>
+<td>R-31</td>
+<td>핵심 로직은 자동 테스트로 검증된다</td>
+<td><code>npm test</code>(<code>node --test</code>) 실행 시 핵심 모듈 테스트가 통과한다 (현재 329 pass)</td>
+<td>N/A (자동 테스트 — test-results로 입증)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>부록 A. 요구사항 ↔ 코드·테스트 추적표 (자동 검증 보조)</h2>
+<blockquote>
+<p>가이드 6번(테스트) 권고에 따라, 각 요구사항을 구현 코드와 테스트에 매핑한다. 기능 요구사항은 코드·테스트로, 비기능 요구사항은 평가 카드로 Agent가 분류한다.</p>
+</blockquote>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>주요 구현 코드</th>
+<th>관련 테스트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td><code>routes/main.js</code>, <code>controllers/enter*</code></td>
+<td><code>test/workout/onboarding-guide.test.js</code></td>
+</tr>
+<tr>
+<td>R-02, R-03</td>
+<td><code>views/</code> 운동 화면, 브라우저 MediaPipe Pose</td>
+<td><code>test/workout/session-ui.test.js</code></td>
+</tr>
+<tr>
+<td>R-04, R-05</td>
+<td><code>scoring/</code> (engine·curve·rule-engine), <code>exercises/rules/*.yaml</code></td>
+<td><code>test/scoring/scoring-engine.test.js</code>, <code>test/workout/exercise-rule-separation.test.js</code>, <code>test/workout/squat-scoring-robustness.test.js</code>, <code>test/workout/scoring-strictness.test.js</code></td>
+</tr>
+<tr>
+<td>R-06</td>
+<td><code>scoring/rep-counter</code></td>
+<td><code>test/workout/scoring-state-machine.test.js</code></td>
+</tr>
+<tr>
+<td>R-07</td>
+<td><code>llm/</code> 세트 피드백 스킬, <code>routes/score.js</code> <code>/api/score/feedback</code></td>
+<td><code>test/llm/set-feedback.test.js</code>, <code>test/coach/coach-feedback.test.js</code></td>
+</tr>
+<tr>
+<td>R-08</td>
+<td><code>scoring/</code> 품질 게이트</td>
+<td><code>test/workout/quality-gate.test.js</code>, <code>test/workout/quality-gate-session.test.js</code></td>
+</tr>
+<tr>
+<td>R-09, R-10</td>
+<td><code>body/</code> (geometry·landmarks·analyzer), <code>routes</code> <code>/api/body-analysis/*</code></td>
+<td><code>test/features/body-course.test.js</code></td>
+</tr>
+<tr>
+<td>R-11, R-12</td>
+<td><code>course/</code> 코스 생성기, <code>routes</code> <code>/api/course/*</code></td>
+<td><code>test/features/body-course.test.js</code></td>
+</tr>
+<tr>
+<td>R-13~R-15</td>
+<td><code>controllers/personalization*</code>, <code>routes</code> <code>/api/profile</code>·<code>/api/injury</code>·<code>/api/personal-range</code></td>
+<td><code>test/features/body-course.test.js</code></td>
+</tr>
+<tr>
+<td>R-16~R-17</td>
+<td><code>routes/workout.js</code>, <code>controllers/workout*</code></td>
+<td><code>test/workout/routine-session-manager.test.js</code>, <code>test/workout/session-controller-start-flow.test.js</code>, <code>test/session-buffer.test.js</code></td>
+</tr>
+<tr>
+<td>R-18</td>
+<td><code>routes</code> <code>/history/*</code>, <code>backend/analysis/</code></td>
+<td><code>test/history-metric-series.test.js</code>, <code>test/analysis/repository/workout-history.repository.test.js</code></td>
+</tr>
+<tr>
+<td>R-19</td>
+<td><code>backend/analysis/</code> 성장 리포트 + LLM 코치</td>
+<td><code>test/analysis/**</code> (history-trend·llm-coach·controller·service)</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td><code>controllers</code> 퀘스트, <code>routes</code> <code>/quest</code>·<code>/api/quest/*</code></td>
+<td><code>test/workout/*</code>(세션 연동)</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td><code>routes/tts.js</code>, <code>controllers/tts*</code></td>
+<td><code>test/tts-controller.test.js</code></td>
+</tr>
+<tr>
+<td>R-22, R-23</td>
+<td><code>routes/voice.js</code>, <code>/api/voice/*</code> 프록시</td>
+<td><code>test/workout/session-controller-voice.test.js</code>, <code>test/workout/session-voice.test.js</code></td>
+</tr>
+<tr>
+<td>R-24</td>
+<td><code>routes/admin.js</code>, <code>controllers/admin*</code></td>
+<td><code>test/workout/exercise-rule-separation.test.js</code></td>
+</tr>
+<tr>
+<td>R-25</td>
+<td><code>config/local-db/</code> SQLite 계층</td>
+<td><code>test/analysis/compat/ai-growth-report-query-shape.test.js</code></td>
+</tr>
+<tr>
+<td>R-26</td>
+<td><code>llm/</code> 로컬 Transformer + 템플릿 폴백</td>
+<td><code>test/llm/local-llm.test.js</code>, <code>test/analysis/llm-coach/fallback-growth-report-generator.test.js</code></td>
+</tr>
+<tr>
+<td>R-27</td>
+<td>규칙 엔진 vs LLM 권한 분리</td>
+<td><code>test/workout/authority-separation.test.js</code></td>
+</tr>
+<tr>
+<td>R-31</td>
+<td>전체 테스트 스위트</td>
+<td><code>npm test</code> (<code>node --test</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>부록 B. 미해결/주의 사항 (제출 전 보완 권장)</h2>
+<ul>
+<li><strong>시연 타임스탬프 미기입(⏳):</strong> 시연 영상 녹화 후 각 행의 타임스탬프를 실제 시각으로 채워야 한다.</li>
+<li><strong>루트 <code>test.js</code> 실패 1건:</strong> 루트의 <code>test.js</code>는 브라우저 DOM(<code>document</code>)을 요구해 Node 단독 실행 시 실패한다. 제출 전 정리(또는 jsdom 환경 분리)하고, 정식 테스트는 <code>test/</code>에 위치한다.</li>
+<li><strong>test-results 첨부:</strong> 평가 환경 미실행 대비 <code>node --test</code> 결과 로그/리포트를 <code>test-results/</code>에 첨부할 것 (R-32 입증).</li>
+</ul>

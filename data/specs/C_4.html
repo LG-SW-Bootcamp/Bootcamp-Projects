@@ -1,0 +1,503 @@
+<h1>SW Bootcamp 13기 C반 4팀 — 요구사항 명세서</h1>
+<blockquote>
+<p><strong>프로젝트명</strong>: Copilot 메타 프롬프팅 (Prompt Refiner)
+<strong>한 줄 정의</strong>: 사용자가 거칠고 모호하게 입력한 프롬프트를, RAG(벡터검색+리랭킹)와 LLM을 결합한 <strong>4단계 메타 프롬프팅 파이프라인</strong>으로 명료하고 구조화된 프롬프트로 정제해, VS Code Copilot Chat에서 <strong>확인 후 전송</strong>하도록 돕는 시스템.</p>
+</blockquote>
+<hr />
+<h2>1. 시스템 개요</h2>
+<p>본 시스템은 역할이 분리된 <strong>3개 프로그램</strong>으로 구성된다.</p>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>프로그램</th>
+<th>역할</th>
+<th>핵심 기술</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>program_AI</code></td>
+<td>LLM·임베딩·리랭커 3종 모델을 OpenAI 호환 API로 <strong>서빙</strong></td>
+<td>vLLM, Qwen3 계열 모델</td>
+</tr>
+<tr>
+<td><code>program_backend</code></td>
+<td>4단계 파이프라인(<strong>정제 → 검색 → 리랭킹 → 생성</strong>) + 벡터DB 시각화 + 데모 웹페이지</td>
+<td>FastAPI, ChromaDB</td>
+</tr>
+<tr>
+<td><code>program_extension</code></td>
+<td>VS Code <code>@refine</code> 확장: 정제 미리보기 · 승인 게이트(5액션) · 정제 내역 로깅/뷰어</td>
+<td>VS Code Extension API (Node.js)</td>
+</tr>
+</tbody>
+</table></div>
+<h3>처리 흐름</h3>
+<pre><code>사용자 원본 프롬프트
+   │  (VS Code @refine)
+   ▼
+[program_extension] ──HTTP /refine──▶ [program_backend]
+                                          │
+            (1) LLM 정제(rewrite) ───────┐│ ──▶ [program_AI] LLM
+            (2) 벡터 검색(search) ────────┤│ ──▶ [program_AI] 임베딩 + ChromaDB
+            (3) 리랭킹(rerank) ───────────┤│ ──▶ [program_AI] 리랭커
+            (4) 최종 생성(generate) ──────┘│ ──▶ [program_AI] LLM
+                                          ▼
+                            정제된 프롬프트(refined) 반환
+   │
+   ▼
+[program_extension] 미리보기 → 사용자 승인 → 네이티브 Copilot 전송 + 내역 기록
+</code></pre>
+<hr />
+<h2>2. 요구사항 작성 원칙</h2>
+<ul>
+<li><strong>요구사항 ID</strong>: 기능/비기능을 구분하지 않는 <strong>중립 번호(R-01, R-02 …)</strong> 를 사용한다. (기능/비기능 분류는 평가 Agent가 수행)</li>
+<li><strong>검증 기준</strong>: 측정 가능한 완료 조건으로 작성한다.</li>
+<li><strong>테스트 연결</strong>: 각 요구사항은 자동 테스트 또는 점검 스크립트와 1:1 이상으로 연결되며, 추적은 <a href="#4-검증-추적-매트릭스">4. 검증 추적 매트릭스</a>에 정리한다.</li>
+<li><strong>시연 타임스탬프</strong>: 영상 녹화 후 기입한다. 영상으로 보일 수 없는 내부 로직은 <code>N/A (사유)</code>로 표기한다.</li>
+<li>표기 상태: <code>미정 (녹화 후 기입)</code> = 시연 예정 / <code>N/A (...)</code> = 시연 불가(테스트로 검증).</li>
+</ul>
+<hr />
+<h2>3. 요구사항 목록</h2>
+<blockquote>
+<p>시연 타임스탬프의 <code>미정</code>은 시연 영상 녹화 후 실제 <code>MM:SS</code>로 교체한다.</p>
+</blockquote>
+<h3>program_AI — 모델 서빙</h3>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>요구사항 내용</th>
+<th>검증 기준 (완료 조건)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td>LLM 서버가 OpenAI 호환 <code>POST /v1/chat/completions</code> 요청에 텍스트 응답을 반환한다</td>
+<td>메시지를 보내면 <code>choices[0].message.content</code>(또는 추론모델의 <code>reasoning</code>)에 빈 문자열이 아닌 텍스트가 담겨 200으로 반환된다</td>
+<td>N/A (서버 내부 API — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>임베딩 서버가 <code>POST /v1/embeddings</code> 요청에 고정 차원의 임베딩 벡터를 반환한다</td>
+<td>입력 문장 1개에 대해 <code>data[0].embedding</code>이 길이가 일정한(&gt;0) 실수 배열로 반환된다</td>
+<td>N/A (서버 내부 API — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>리랭커 서버가 <code>POST /v1/rerank</code> 요청에 문서별 관련도 점수를 반환하고, 질의와 관련된 문서가 상위에 온다</td>
+<td>"수도가 서울인 나라는?" 질의 + 후보 3건 입력 시, 정답 문서의 <code>relevance_score</code>가 무관 문서보다 높다</td>
+<td>N/A (서버 내부 API — 테스트로 검증)</td>
+</tr>
+</tbody>
+</table></div>
+<h3>program_backend — 파이프라인 / API</h3>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>요구사항 내용</th>
+<th>검증 기준 (완료 조건)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-04</td>
+<td>헬스체크 엔드포인트를 제공한다</td>
+<td><code>GET /health</code> 가 200과 <code>{"status":"ok"}</code> 를 반환한다</td>
+<td>N/A (운영용 — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>(1단계 정제) 모호한 사용자 입력을 명료한 영어 프롬프트로 재작성한다</td>
+<td><code>POST /rewrite</code> 가 <code>translated_input</code>(영어 번역)과 <code>rewritten_prompt</code>(구조화된 영어 프롬프트) 두 문자열 필드를 가진 JSON을 반환한다. 비영어 입력 시 영어로 번역된다</td>
+<td>00:00 ~ 00:25</td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>(정제 견고성) LLM이 코드펜스로 감싸거나 JSON이 아닌 응답을 줘도 깨지지 않는다</td>
+<td><code>```json ... ```</code> 펜스가 제거되어 파싱되고, 파싱 불가 시 원문을 <code>rewritten_prompt</code>에 담아 폴백한다(예외 미발생)</td>
+<td>N/A (내부 견고성 — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td>(2단계 검색) 쿼리를 임베딩해 Chroma에서 유사도 상위 top_k 후보를 반환한다</td>
+<td><code>POST /search</code> 결과의 각 후보가 <code>chroma_rank, id, chroma_distance, metadata, document</code> 필드를 가지며, 개수 ≤ 요청 top_k 이다</td>
+<td>00:25 ~ 00:38</td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>(3단계 리랭킹) 검색 후보를 리랭커로 재점수화해 내림차순 정렬하고 상위 top_n만 반환한다</td>
+<td>리랭킹 결과는 <code>rerank_score</code> 내림차순으로 정렬되고, 길이가 top_n 이하이며, 각 항목에 <code>rerank_score</code>가 포함된다</td>
+<td>00:38 ~ 00:53</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>(4단계 생성) 후보 템플릿을 사용자 요청에 맞게 적응시킨 최종 프롬프트를 생성한다</td>
+<td><code>POST /generate</code> 응답 <code>adapted_prompt</code>에서 <code>"final adapted prompt:"</code> 라벨이 있으면 그 뒤만 추출하고, 없으면 전문을 사용한다</td>
+<td>00:53 ~ 01:07</td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>(전체 파이프라인) <code>/refine</code> 한 번으로 정제→검색→리랭킹→생성을 모두 실행한다</td>
+<td><code>POST /refine {"prompt"}</code> 가 최종 결과 <code>refined</code> 와 중간 산출물(<code>translated_input</code>, <code>rewritten_prompt</code>, <code>templates[]</code>)을 함께 반환한다</td>
+<td>01:07 ~ 01:36</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>파이프라인 어느 단계가 실패해도 서버가 명확한 오류를 반환한다(클라이언트 폴백 가능)</td>
+<td>단계 중 예외 발생 시 <code>/refine</code> 등은 500과 오류 메시지를 반환한다(서버 미중단)</td>
+<td>N/A (오류 처리 — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>외부 origin(확장)에서의 직접 호출을 위해 CORS를 허용한다</td>
+<td>응답에 <code>Access-Control-Allow-Origin: *</code> 가 포함된다</td>
+<td>N/A (통신 설정 — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>필수 연결 설정(.env)이 비어 있으면 무엇을 채워야 하는지 명확히 알린다</td>
+<td>필수 값 누락 시 누락 키 이름을 포함한 오류 메시지를 발생시킨다</td>
+<td>N/A (설정 가드 — 테스트로 검증)</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>임베딩 서버 없이도 미리 계산된 벡터DB 2D 지도(점/군집)를 제공한다</td>
+<td><code>GET /viz/map</code> 이 번들 아티팩트(<code>viz_layout.json</code>)만으로 <code>points</code>/<code>clusters</code>를 반환한다(외부 서버 호출 없음)</td>
+<td>01:36 ~ 01:55</td>
+</tr>
+</tbody>
+</table></div>
+<h3>program_extension — VS Code <code>@refine</code> 확장</h3>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>요구사항 내용</th>
+<th>검증 기준 (완료 조건)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-15</td>
+<td><code>@refine</code>로 명시 호출했을 때만 정제하고, 미리보기 단계에서 LLM으로 자동 전송하지 않는다</td>
+<td><code>swbc.refine</code> 참가자가 등록되고, 핸들러 실행 시 <code>workbench.action.chat.open</code>(자동 전송)이 호출되지 않는다</td>
+<td>01:55 ~ 03:07</td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>정제본 미리보기와 5가지 액션을 함께 보여준다</td>
+<td>출력에 정제본 텍스트와 5개 명령(<code>refineAllow</code>/<code>refineModify</code>/<code>refineTryAgain</code>/<code>refineUseOriginal</code>/<code>refineCancel</code>)이 모두 노출된다</td>
+<td>03:07 ~ 03:24</td>
+</tr>
+<tr>
+<td>R-17</td>
+<td><strong>Allow</strong>: 정제본을 네이티브 Copilot에 전송하고 교체 내역 1건을 기록한다</td>
+<td>Allow 시 정제본이 즉시 전송(<code>isPartialQuery</code> 아님)되고, 로그에 <code>before=원본, after=정제본</code> 1건이 append 된다</td>
+<td>03:24 ~ 03:48</td>
+</tr>
+<tr>
+<td>R-18</td>
+<td><strong>Modify</strong>: 정제본을 입력창에 채우기만 하고 전송하지 않는다</td>
+<td>Modify 시 <code>chat.open</code>이 <code>query=정제본, isPartialQuery=true</code>로 호출된다(전송 아님)</td>
+<td>03:48 ~ 04:03</td>
+</tr>
+<tr>
+<td>R-19</td>
+<td><strong>Use original</strong>: 원본을 그대로 전송하고 내역은 기록하지 않는다</td>
+<td>원본이 즉시 전송되고(교체 아님), 로그가 기록되지 않는다</td>
+<td>04:03 ~ 04:19</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td><strong>Cancel</strong>: 원본 앞에 <code>@refine</code>를 붙여 입력창에 복원한다(컨텍스트 유지)</td>
+<td>Cancel 시 <code>query="@refine "+원본, isPartialQuery=true</code>로 시드된다</td>
+<td>04:19 ~ 04:30</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td><strong>Try again</strong>: 동일 원본으로 <code>@refine</code>를 재요청해 미리보기를 갱신한다</td>
+<td>Try again 시 <code>query="@refine "+원본</code>으로 <code>chat.open</code>이 호출된다</td>
+<td>04:30 ~ 04:59</td>
+</tr>
+<tr>
+<td>R-22</td>
+<td>최종 전송 건을 일자별 로그(<code>observe-YYYY-MM-DD.log</code>, JSONL)에 한 줄씩 저장한다</td>
+<td><code>{ts, channel, model, before, after}</code> 스키마 1줄이 append 되고, <code>ts</code>는 <code>YYYY-MM-DDTHH:MM:SS</code> 형식이며, 미설정 시 <code>globalStorage/logs</code>·설정 시 <code>logDir</code>에 저장된다</td>
+<td>04:59 ~ 05:09</td>
+</tr>
+<tr>
+<td>R-23</td>
+<td>저장된 정제 내역을 시간순으로 정렬해 최근 N건만 조회한다</td>
+<td><code>readEntries</code>가 <code>ts</code> 오름차순 정렬 결과를 주고, <code>maxEntries</code> 초과 시 최근 N건만 남기며, 깨진 줄은 건너뛴다(빈 폴더는 빈 배열)</td>
+<td>05:09 ~ 05:19</td>
+</tr>
+<tr>
+<td>R-24</td>
+<td>정제 서버 실패/예외 시 무한 로딩 없이 fail-open으로 복구 UI를 제공한다</td>
+<td>타임아웃·4xx·5xx·연결실패·예외 시 throw 없이 원본을 유지하고, "실패" 메시지 + <code>원본 전송/재시도/취소</code> Fallback UI를 표출한다(자동 전송 안 함)</td>
+<td>05:19 ~ 05:57</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>4. 검증 추적 매트릭스</h2>
+<p>각 요구사항이 <strong>무엇으로 검증되는가</strong>를 정리한다.</p>
+<ul>
+<li><strong>검증유형</strong>: <code>자동(단위)</code> = 외부 서버 없이 실행 / <code>자동(통합)</code> = 라이브 모델 서버 필요</li>
+<li><strong>상태</strong>: <code>통과</code> = 테스트 실행 통과 확인 / <code>통과(skip)</code> = 코드 존재·서버 없어 현재 skip(서버 기동 시 검증) / <code>구현됨</code> = 테스트 코드 존재(이 세션에선 Node.js 미설치로 미실행)</li>
+<li>모든 제출용 테스트는 <code>result_file/tests/&lt;프로그램&gt;/</code> 아래에, 실행 결과(로그·리포트)는 <code>result_file/test-results/&lt;프로그램&gt;/</code> 아래에 둔다. (개발용 점검 스크립트 <code>src/program_AI/scripts/test_apis.py</code>는 제출 대상이 아니다.)</li>
+<li>경로 표기에서 파일은 <code>tests/&lt;프로그램&gt;/</code> 기준 상대경로, <code>::</code> 뒤는 테스트 함수명.</li>
+</ul>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>R-ID</th>
+<th>대상</th>
+<th>검증유형</th>
+<th>서버필요</th>
+<th>연결 테스트 / 근거</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td>AI</td>
+<td>자동(통합)</td>
+<td>✅ LLM</td>
+<td><code>program_AI/test_serving.py :: test_llm_chat_completion</code></td>
+<td>통과(skip)</td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>AI</td>
+<td>자동(통합)</td>
+<td>✅ 임베딩</td>
+<td><code>program_AI/test_serving.py :: test_embedding_returns_fixed_dim_vector</code></td>
+<td>통과(skip)</td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>AI</td>
+<td>자동(통합)</td>
+<td>✅ 리랭커</td>
+<td><code>program_AI/test_serving.py :: test_reranker_orders_relevant_document_first</code></td>
+<td>통과(skip)</td>
+</tr>
+<tr>
+<td>R-04</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>program_backend/test_api.py :: test_health_returns_ok</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>BE</td>
+<td>자동(단위)+통합</td>
+<td>⛯ 통합만</td>
+<td><code>test_pipeline.py :: test_rewrite_parses_translated_and_rewritten</code>(단위) · <code>test_integration.py :: test_rewrite_endpoint_live</code>(통합)</td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_pipeline.py :: test_strip_code_fence_removes_json_fence</code> · <code>test_rewrite_handles_fenced_json</code> · <code>test_rewrite_falls_back_when_not_json</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td>BE</td>
+<td>자동(통합)</td>
+<td>✅ 임베딩</td>
+<td><code>test_integration.py :: test_search_endpoint_live</code> (Chroma는 번들)</td>
+<td>통과(skip)</td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_retrieval.py :: test_rerank_candidates_sorts_desc_and_attaches_score</code> · <code>test_pipeline_rerank_truncates_to_top_n</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_pipeline.py :: test_generate_extracts_after_label</code> · <code>test_generate_uses_full_text_without_label</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>BE</td>
+<td>자동(통합)</td>
+<td>✅ 전체</td>
+<td><code>test_integration.py :: test_refine_full_pipeline_live</code></td>
+<td>통과(skip)</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_api.py :: test_refine_returns_500_on_pipeline_error</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_api.py :: test_cors_header_present</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_pipeline.py :: test_require_raises_with_missing_key_name</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>BE</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>test_api.py :: test_viz_map_returns_points_and_clusters</code></td>
+<td>통과</td>
+</tr>
+<tr>
+<td>R-15</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>tests/program_extension/src/chat.test.js :: [R-15]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-16]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-17</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-17]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-18</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-18]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-19</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-19]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-20]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>chat.test.js :: [R-21]</code>, <code>[R-24] 재시도</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-22</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>logger.test.js :: [R-22]</code>, <code>config.test.js :: [R-22]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-23</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>logReader.test.js :: [R-23]</code>, <code>config.test.js :: [R-23보강]</code></td>
+<td>구현됨</td>
+</tr>
+<tr>
+<td>R-24</td>
+<td>EXT</td>
+<td>자동(단위)</td>
+<td>❌</td>
+<td><code>refiner.test.js :: [R-24]</code>, <code>chat.test.js :: [R-24]</code></td>
+<td>구현됨</td>
+</tr>
+</tbody>
+</table></div>
+<h3>테스트/결과 디렉터리 구조</h3>
+<pre><code>result_file/
+├── tests/
+│   ├── program_AI/          # (작성예정) 모델 서빙 통합 테스트
+│   ├── program_backend/     # (작성예정) 파이프라인/API 테스트
+│   └── program_extension/   # (구현됨) chat/refiner/logger/logReader/config 테스트
+└── test-results/
+    ├── program_AI/          # 실행 결과(로그·리포트)
+    ├── program_backend/
+    └── program_extension/   # junit.xml 등
+</code></pre>
+<h3>테스트 실행 방법</h3>
+<p>실행 환경은 <strong>Linux</strong>(vLLM/CUDA 서버 표준). 파이썬 환경(가상환경) 준비는 <strong>RUN.md</strong> 참고
+(위치가 서버마다 달라 스크립트에서 다루지 않음). <code>tests/run_tests.sh</code> 가 프로그램별로 실행되며,
+<code>--save</code> 를 붙이면 결과 로그를 <code>test-results/&lt;프로그램&gt;/</code>에 저장한다. <code>-s</code> 로 실행되어
+각 테스트의 <strong>입력→출력</strong>이 로그에 그대로 남는다.</p>
+<pre><code class="language-bash">cd result_file
+# (가상환경 활성화 또는 PYTHON 환경변수로 인터프리터 지정 — RUN.md 참고)
+
+# 프로그램별 (콘솔로 보기 / 저장)
+bash tests/run_tests.sh backend            # 백엔드만 — 콘솔 출력
+bash tests/run_tests.sh backend --save     # 백엔드만 — test-results/program_backend/ 에 저장
+bash tests/run_tests.sh ai --save          # AI(통합) — 서버 필요(없으면 skip)
+bash tests/run_tests.sh extension --save   # 확장(Node 필요)
+bash tests/run_tests.sh all --save         # 셋 다 실행 + 저장
+#   예) 가상환경을 직접 지정:  PYTHON=.venv/bin/python bash tests/run_tests.sh all --save
+</code></pre>
+<p><strong>통합 테스트 통과를 위한 준비</strong>
+- 백엔드 통합: <code>src/program_backend/.env</code> 에 LLM/EMBED/RERANK 연결값 입력
+- AI 통합: <code>export AI_HOST=... LLM_PORT=... EMBED_PORT=... RERANK_PORT=... *_MODEL=...</code>
+- 준비가 안 되면 통합 테스트는 실패가 아니라 자동 <strong>skip</strong> 된다.</p>
+<blockquote>
+<p><strong>test-results 정책</strong>: 프로그램별 실제 실행 로그(junit.xml + 콘솔 출력)를 <code>test-results/&lt;프로그램&gt;/</code>에
+저장해 둔다(가이드: 실행 불가에 대비해 결과를 함께 첨부). 통합 테스트(vLLM 서버 필요)는 서버를
+띄운 상태에서 실행해 <strong>통과 로그</strong>를 박제한다. 로그 재생성은 <code>result_file/save_test_results.ps1</code>
+한 번으로 수행한다.</p>
+<p>평가 Agent가 자체 환경에서 테스트를 직접 실행하더라도, ① 일반 <code>pytest</code> 실행은 우리가 커밋한
+<code>test-results/</code> 파일을 덮어쓰지 않으며(결과 저장은 <code>--junitxml</code> 명시 시에만), ② Agent 환경엔
+모델 서버가 없어 통합 테스트는 자동 <strong>skip</strong> 되므로, 첨부된 통과 로그가 그 검증 증거가 된다.</p>
+</blockquote>
+<hr />

@@ -1,0 +1,242 @@
+<h1>온디바이스 프로액티브 차량 AI 에이전트 — 요구사항 명세서</h1>
+<blockquote>
+<p>출처: 팀 Notion "요구사항 명세서"(2026-06-27 스냅샷)를 submission에 반영.
+요구사항은 <strong>시연 시나리오(3막 + 카드A 4인 캐빈)에서 식별</strong>. 중립 ID(R-01…). <code>검증 현황</code>은 이 submission의 <code>tests/</code>·<code>test-results/</code> 매핑.</p>
+<p>변경(2026-06-30): <strong>R-01</strong> 검증기준을 "시동 시" → <strong>"탑승 후(착석)"</strong> 로 정정 — 본 시나리오는 시동 이벤트가 아니라 <strong>탑승(착석)→얼굴인식</strong> 흐름이므로.</p>
+</blockquote>
+<h2>검증 현황 범례</h2>
+<ul>
+<li>✅<strong>자동측정</strong> — <code>tests/</code>로 실측, 원시값 <code>test-results/*.json</code></li>
+<li>🧪<strong>단위테스트</strong> — <code>tests/.../test_*.py</code> 통과(<code>unit_tests.xml</code>)</li>
+<li>🎬<strong>데모/시나리오</strong> — 3막·카드A 실연으로 입증(영상 타임스탬프)</li>
+<li>📐<strong>설계·코드리뷰</strong> — 코드 경로/구조로 입증</li>
+<li>⏳<strong>미측정/미완결</strong> — 아래 §미흡 참조</li>
+</ul>
+<h2>요구사항 (R-01 ~ R-25)</h2>
+<blockquote>
+<p>하나의 목록(중립 ID R-XX, 접두어·분류 없음 — 최종 분류는 평가 Agent). 가독성을 위해 <strong>기능 요구사항(R-01~R-19)을 앞에, 비기능 요구사항(R-20~R-25)을 뒤에</strong> 두도록 번호를 순차 정렬했다.</p>
+</blockquote>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>요구사항</th>
+<th>검증 기준</th>
+<th>검증 현황(submission)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td>운전자/탑승자를 자동 식별(페이스ID 또는 폰 연동)하고 프로필·약속 기록을 로드</td>
+<td><strong>등록자 탑승 후(착석) 3초 이내 식별</strong>, 미등록자는 게스트, 식별 직후 약속 목록 로드</td>
+<td>✅ <code>performance/face</code> (100% 30/30, 0.247s) · 🎬 1막·카드A</td>
+<td>00:08 (탑승·식별) · 06:46</td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>음성 발화를 온디바이스 STT로 인식</td>
+<td>의도 인식 성공률 ≥ 95% (실측 96.7%, 29/30 · 오류 1건 3.3%) · 음성→텍스트 STT EN CER 4.4%·KO 20%</td>
+<td>✅ <code>performance/scenario</code>(의도)·<code>program_frontend/performance/stt</code></td>
+<td>07:14 (STT 발화)</td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>명령형 아닌 발화/메시지에서 <strong>미래 약속 포착</strong> → 홀드 저장(즉시 실행 안 함)</td>
+<td>"퇴근길 세탁소" 발화/메시지 시 홀드 1건, 즉시 실행 0건</td>
+<td>🧪 <code>nav/test_day_service</code> · 🎬 1막</td>
+<td>07:14 (약속 포착)</td>
+</tr>
+<tr>
+<td>R-04</td>
+<td>좌석 점유(탑승자·재실) 감지 (압력센서 mock; 비전 보강)</td>
+<td>뒷좌석(반려동물)·조수석 감지 이벤트, 오탐 ≤ 5% (FAR 실측 0%/34프레임)</td>
+<td>✅ <code>performance/face</code>(FAR) · 🧪 <code>nav/test_day_service</code>(set_seat) · 🎬 1막</td>
+<td>00:08 (좌석 감지) · 09:12</td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>외부 이벤트 시 <strong>발화 없이</strong> Plan·Act·Observe 재계획</td>
+<td>이벤트 주입 → 발화 0회 재계획</td>
+<td>🧪 <code>bridge/test_agent_bridge</code> · 🎬 1·3막</td>
+<td>04:24 (무발화 재계획) · 07:45 · 10:44</td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>추측·알림이 아니라 <strong>옵션·근거 수집 후 단일 실행가능안</strong>(전략 갈리면 상호배타 소수안)</td>
+<td>대안 ≥ 2개 후 추천 1개+근거; 갈릴 땐 선택지 ≤ 2</td>
+<td>🧪 <code>bridge/test_agent_bridge</code> · 🎬 1막(강아지)</td>
+<td>07:45 (결정카드) · 11:28</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td><strong>제3자 탑승 시</strong> 개인정보를 <strong>공용 채널에서 블라인드</strong>, 하차 시 복원</td>
+<td>게스트 탑승→공용 음성·CID 비노출, 개인 좌석화면·폰 유지, 하차→원복 · FAR ≤ 5%(실측 0%)</td>
+<td>✅ <code>performance/face</code>(FAR) · 🧪 <code>face_db</code> · 🎬 1막(카풀)</td>
+<td>03:15 (게스트 프라이버시) · 09:12</td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>도착(ETA)이 아니라 <strong>약속 시작 시각</strong> 기준 출발 역산</td>
+<td>14:00 시작 → 출발 = 14:00 −(경로+주차+도보+버퍼)</td>
+<td>🧪 <code>nav/test_route_service</code> · 🎬 2막</td>
+<td>13:52 (ETA 역산)</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>폰 개인문서(MCP)에서 맥락 검색 → <strong>근거 붙은 브리핑</strong>(RAG)</td>
+<td>미팅 메일 주입 시 안건·합의·미결 요약</td>
+<td>🧪 <code>nav/test_day_service</code> · 🎬 2막</td>
+<td>04:04 (RAG 브리핑) · 06:46 · 10:44</td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>약속을 <strong>당일·지정 보존기간</strong> 유지, <strong>다가오는 일정 관련 항목</strong> 자동 소환</td>
+<td>아침 홀드가 저녁 소환; 만료·무관 항목 비소환</td>
+<td>🎬 3막 · 🧪 <code>nav/test_day_service</code>(부분)</td>
+<td>06:32 (저녁 소환) · 06:46 · 13:12</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>전제 변화 시 <strong>영향받는 약속만</strong> 재배치(선택적 재엮음)</td>
+<td>유치원 조기마감 → 픽업 재배치, 무관 0건</td>
+<td>🧪 <code>nav/test_day_service</code> · 🎬 3막</td>
+<td>03:15 (약속 재배치) · 13:12</td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>외부 상대와 가용성 매칭해 홀드 확보·갱신</td>
+<td>연장 홀드 요청 후 확보 상태 반영</td>
+<td>🎬 3막 · 📐</td>
+<td>04:04 (가용성 홀드) · 13:12</td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>결정/안내를 온디바이스 TTS로 음성 출력</td>
+<td>발화 종료~첫 음성 ≤ 2초 (실측 ~1.72초)</td>
+<td>✅ <code>performance/tts</code> · ✅ <code>program_frontend/test_ui_serve</code></td>
+<td>전 구간 (TTS)</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>앱/웹 화면에 약속상태·관찰이벤트·재엮음 로그 표시</td>
+<td>각 비트 화면이 실제 처리와 일치</td>
+<td>🎬 전 구간(demo-a/b UI) · 📐 <code>ui_serve</code></td>
+<td>전 구간 (화면·로그)</td>
+</tr>
+<tr>
+<td>R-15</td>
+<td>외부 이벤트 주입 시뮬레이터 — <em>검증·데모 도구</em></td>
+<td>이벤트 주입 시 트리거로 재계획</td>
+<td>📐 시뮬레이터(시나리오 바) · 🎬 연출</td>
+<td>전 구간 (이벤트 주입)</td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>가역 동작은 선행 실행, 비가역·중요 동작은 <strong>승인 후</strong> 실행 <em>(절차는 R-25)</em></td>
+<td>추천→승인 시에만 실행, 가역 동작은 승인 전 선반영</td>
+<td>🎬 1·3막 · 📐 <code>bridge</code>(승인 게이트)</td>
+<td>07:45 (승인 게이트) · 11:28 · 13:12</td>
+</tr>
+<tr>
+<td>R-17</td>
+<td>다중 탑승자를 <strong>좌석 단위 식별</strong>, 미등록=게스트(저장 없이 폰 연동만)</td>
+<td>가족 3+게스트 1 → 등록 3 식별·게스트 1 분류, 게스트 영구저장 0</td>
+<td>✅ <code>performance/face</code> · 🧪 <code>face_db</code> · 🎬 카드A Act1</td>
+<td>00:08 (다중 식별) · 09:12</td>
+</tr>
+<tr>
+<td>R-18</td>
+<td>탑승자별 <strong>좌석 단위 화면·오디오 분리</strong>(등록자=프로필, 게스트=폰 콘텐츠)</td>
+<td>좌석별 상이 콘텐츠·누설 0; (옵션)아동 졸음 시 해당 좌석 볼륨↓</td>
+<td>🎬 카드A(좌석 화면; demo-a 탑승자별 큰화면·시나리오) · 📐 <code>ui</code></td>
+<td>04:24 (좌석 분리)</td>
+</tr>
+<tr>
+<td>R-19</td>
+<td>(승인 후) <strong>외부 통화 연결</strong>·상대 응답 <strong>청취·해석</strong> → <strong>새 이벤트로 재계획</strong></td>
+<td>통화 → "8시 가능" 청취 → 새 입력으로 재계획</td>
+<td>🎬 카드A Act2 · 📐</td>
+<td>02:25 (통화)</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td>영상·개인 맥락 기기 밖 전송 안 함(온디바이스)</td>
+<td><strong>영상·개인맥락(캘린더·메일 내용) 전송 0</strong> (텍스트 의도·검색어·공개 URL만 외부로)</td>
+<td>📐 <strong>설계·코드리뷰</strong>(데이터 흐름) — VLM 이미지=서버측 path(온프레), 개인맥락=로컬. ※"전송 자체 0"이 아니라 "영상·개인맥락 0"</td>
+<td>N/A (네트워크 로그)</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td>발화 종료~응답 지연 기준 이내</td>
+<td>10회 평균 ≤ 6초 (실측 5.55s avg·5.66s p95)</td>
+<td>✅ <code>performance/latency</code> · ✅ <code>test_ui_serve</code></td>
+<td>N/A (계측)</td>
+</tr>
+<tr>
+<td>R-22</td>
+<td>STT/TTS(Pi5)·LLM(Thor) 동시구동 RTF·리소스 충족</td>
+<td>LLM ≥ 35 tok/s(실측 9B ~35.5) · STT RTF EN 0.14·KO 0.13 · RAM 스왑 0</td>
+<td>✅ <code>performance/llm</code>(LLM)·<code>stt</code>(RTF)</td>
+<td>N/A (계측)</td>
+</tr>
+<tr>
+<td>R-23</td>
+<td>외부 도구 제외 핵심 추론(STT·의도·판단·TTS·약속기록)은 네트워크 없이 동작</td>
+<td>핵심 컴포넌트(STT·LLM·TTS·약속기록)가 전부 온디바이스/온프레라 네트워크 없이 동작</td>
+<td>📐 <strong>설계</strong>(전 컴포넌트 온디바이스 — 별도 차단 테스트 불요)</td>
+<td>N/A (계측·차단)</td>
+</tr>
+<tr>
+<td>R-24</td>
+<td>운전 중 핵심 플로우를 음성만으로 완료(화면은 확인용)</td>
+<td>주행 중 터치 0회로 약속포착→재계획→승인</td>
+<td>🎬 전 구간 · 📐</td>
+<td>02:25 (음성 플로우)</td>
+</tr>
+<tr>
+<td>R-25</td>
+<td>비가역·중요 동작은 LLM 자유판단이 아니라 <strong>결정론적 하네스</strong> <em>(게이트는 R-16)</em></td>
+<td>실행 경로 LLM 자유호출 0 / 동일입력 재현 통과</td>
+<td>📐 코드리뷰 · 🧪 <code>bridge</code>(재현)</td>
+<td>N/A (설계리뷰)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>검증 현황 요약</h2>
+<ul>
+<li>✅ 자동측정: R-01·R-07·R-17(얼굴) · R-02(의도+STT)·R-13(TTS)·R-21(E2E)·R-22(LLM+STT RTF)</li>
+<li>🧪 단위테스트 <strong>40건 전부 통과</strong>: backend(R-01·03·04·05·06·07·08·09·10·11·17·25) · frontend(R-02·13·21·22 — stt_server·ui_serve·mic_preprocess)</li>
+<li>🎬 데모/시나리오 입증: R-10·R-12·R-14·R-16·R-18·R-19·R-24</li>
+<li>📐 설계·코드리뷰: R-15·R-20·R-23·R-25</li>
+<li>⏳ 미완결: 아래 §미흡</li>
+</ul>
+<h2>미흡·미완결 항목 (보완 대상)</h2>
+<ol>
+<li><strong>KO STT 라이브 재검증 (R-02·R-22)</strong> — STT 실측 완료(EN CER 4.4%·RTF 0.14 / KO CER 20%·RTF 0.13, <code>test-results/program_frontend/stt.json</code>). 단 KO 피크 정규화는 <em>녹음 표본 기준</em> 검증분 → <strong>2026-07-01 라이브 마이크 실제 발화로 재측정</strong>, 정규화 조건부/제외 결정(RESULTS caveat 참조).</li>
+<li><strong>표본 협소</strong> — 얼굴(단일 인물·조명 1종)·KO STT(n=1). 다인·조명·짧은 명령 표본 확대.</li>
+<li><strong>R-10·R-12·R-19 자동검증 부재</strong> — 현재 데모/설계 입증(R-08은 <code>test_route_service</code> 단위 추가됨).</li>
+<li><strong>측정 조건 = 정지 프레임·정제 텍스트 (라이브 대비 상한치)</strong> — 얼굴인식(R-01·07·17)은 연속 실시간 영상이 아니라 <strong>특정 스틸컷</strong> 분석, 의도인식(R-02)은 라이브 STT 오디오가 아니라 <strong>텍스트 케이스</strong> 기준. 실측(얼굴 100%·FAR 0%·의도 96.7%)은 <strong>통제 조건의 상한치</strong>이며 주행 중 라이브 입력에선 낮아질 수 있음 — 라이브 영상/오디오 재검증 필요.</li>
+</ol>
+<blockquote>
+<p>R-20(영상·개인맥락 전송 0)·R-23(오프라인 동작)은 <strong>별도 테스트 대상 아님</strong> — 전 컴포넌트 온디바이스/온프레 <strong>설계로 보장</strong>(VLM 이미지=서버측 path, 개인맥락=로컬, STT·LLM·TTS·약속기록=로컬). 코드·데이터흐름 리뷰로 검증.</p>
+</blockquote>
+<h2>시나리오 기반 보강 (반영 완료)</h2>
+<ul>
+<li><strong>다국어 STT (R-02)</strong>: 라이브 마이크=<strong>한국어</strong>, demo 사전녹음=<strong>영어</strong> — 소스별 언어 라우팅(<code>/stt?lang=</code>) <strong>구현·측정 완료</strong>, R-02 현황에 반영.</li>
+<li><strong>탑승 순차 좌석 UX (R-18)</strong>: 탑승자가 바뀔 때 큰 화면이 <strong>그 탑승자 화면으로 전환·본인 시나리오 재생</strong>(아이=공룡, 엄마=콘텐츠) — demo-a <strong>구현 완료</strong>, R-18 검증기준에 반영.</li>
+</ul>
+<hr />
+<h3>작성 규칙 (참고)</h3>
+<ul>
+<li><strong>중립 ID</strong>(R-01…): 기능/비기능 분류는 Agent가 — 기능은 코드·테스트 매핑, 비기능은 평가 카드.</li>
+<li><strong>검증 기준</strong>은 구체·측정 가능할수록 자동검증 정확도↑. <code>[N]</code> 등은 팀이 목표치 확정 후 치환.</li>
+<li><strong>타임스탬프</strong>: 시연영상 촬영 완료 — 각 요구사항에 <code>MM:SS</code> 기입(연속 기능은 <code>전 구간</code>). 영상 미입증 항목은 <code>N/A(사유)</code>.</li>
+</ul>
+<h3>명세 이력(Notion 반영)</h3>
+<ul>
+<li>2026-06-24: R-16/R-25 분리 유지+상호참조 · R-10 보존기간·소환 보강 · 카드A 반영해 <strong>R-17~R-19 신설</strong> · R-06·R-07·R-21·R-22 갱신.</li>
+<li>2026-06-30(submission): <strong>R-01 "시동"→"탑승 후"</strong> 정정 · 각 R에 submission 검증현황 매핑 · §미흡·§제안 추가.</li>
+</ul>

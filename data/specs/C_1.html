@@ -1,0 +1,210 @@
+<h1>Dadumi 요구사항 명세서 (수정본)</h1>
+<p><strong>프로젝트명</strong>: Dadumi (In-Line AI 글쓰기 어시스턴트)<br />
+<strong>작성일</strong>: 2026-06-26 (최종 수정: 2026-07-01)<br />
+<strong>버전</strong>: 1.0.1</p>
+<p>---</p>
+<h2>프로젝트 개요</h2>
+<p>Dadumi는 백그라운드에서 네이티브로 실행되는 크로스 플랫폼(Windows, macOS, Linux) 데스크탑 글쓰기 어시스턴트입니다. 사용자가 텍스트 입력이 가능한 모든 환경(Slack, Notion, Chrome, MS Word, 메모장 등)에서 전역 단축키로 AI를 직접 호출하고, 현재 선택한 텍스트를 AI로 처리한 뒤 결과를 자동으로 원래 위치에 붙여넣을 수 있게 합니다. 수동 복사-붙여넣기 과정을 완전히 없애는 것이 핵심 목표입니다.</p>
+<p>---</p>
+<h2>요구사항 목록</h2>
+<div class="spec-table"><table>
+<thead>
+<tr>
+<th>요구사항 ID</th>
+<th>요구사항 내용</th>
+<th>검증 기준 (완료 조건)</th>
+<th>시연 타임스탬프</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-01</td>
+<td>전역 단축키(<code>Option+Space</code> / <code>Ctrl+Space</code>)로 어시스턴트가 활성화된다</td>
+<td>임의의 포어그라운드 앱에서 단축키 입력 시 플로팅 메뉴가 나타난다</td>
+<td><strong>00:11</strong>, <strong>00:26</strong></td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>단축키 호출 시점에 선택(블록 지정)된 텍스트를 자동으로 캡처한다</td>
+<td>선택된 텍스트(<code>제 제가 담당자가 아니라서 잘 모르겠어요ㅠㅠ</code>)가 플로팅 메뉴에 AI 처리 입력으로 정상 전달된다</td>
+<td><strong>00:11</strong></td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>플로팅 메뉴가 마우스 커서 주변에 표시된다</td>
+<td>단축키 호출 시 메뉴가 마우스 위치 기준 ±50px 이내에 위치한다</td>
+<td><strong>00:11</strong>, <strong>00:26</strong></td>
+</tr>
+<tr>
+<td>R-04</td>
+<td>플로팅 메뉴는 반투명 UI로 표시된다</td>
+<td>배경이 반투명하게 비쳐 보이는 블러 효과가 UI에 적용되어 있다</td>
+<td><strong>00:11</strong>, <strong>00:26</strong></td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>프리셋 AI 기능(문법 교정, 문장 개선, 전문화, 이어쓰기, 번역) 5종을 버튼 한 번 클릭으로 실행할 수 있다</td>
+<td>각 프리셋 버튼 중 하나(예: '전문적인 말투')를 클릭하여 AI 응답을 트리거할 수 SN 있다</td>
+<td><strong>00:13</strong></td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>사용자 정의 프롬프트를 직접 입력하여 AI에게 자유로운 지시를 내릴 수 있다</td>
+<td>텍스트 입력란('직접 입력...')과 실행(Run) 버튼이 UI 내에 존재한다</td>
+<td><strong>00:11</strong> (UI 노출)</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td>AI 응답이 표시된다</td>
+<td>프리셋 클릭 후 결과 영역에 AI 응답 텍스트가 즉시 스트리밍되어 표시된다</td>
+<td><strong>00:15</strong></td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>AI 생성 중 생성을 중단(Stop)할 수 있다</td>
+<td>생성 중 Stop 버튼 클릭 시 스트리밍이 즉시 중단되고 버튼 상태가 원래대로 복귀한다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>AI 결과를 원래 앱의 텍스트 입력 위치에 자동으로 붙여넣기 할 수 있다</td>
+<td>붙여넣기 단축키(<code>Cmd+Enter</code> 등) 또는 버튼 클릭 시, 선택했던 텍스트가 AI 결과물로 교체된다</td>
+<td><strong>00:17</strong></td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>AI 결과를 클립보드에 복사할 수 있다</td>
+<td>'복사' 버튼 클릭 시 결과 텍스트가 시스템 클립보드에 저장된다</td>
+<td><strong>00:15</strong> (UI 노출)</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>다중 AI 제공사(OpenAI, Anthropic, Google Gemini, AWS Bedrock, OpenRouter, Custom)를 선택하여 사용할 수 있다</td>
+<td>설정 메뉴 내에서 제공사 변경 및 API 키 관리가 가능하다</td>
+<td><strong>00:50 \~ 00:59</strong></td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>각 AI 제공사별 모델을 선택할 수 있다</td>
+<td>제공사 우측 드롭다운 메뉴를 통해 모델 선택이 가능하다</td>
+<td><strong>01:00 \~ 01:07</strong></td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>동적 모델 목록 조회를 지원하는 제공사에서 최신 모델 목록을 API로 불러올 수 있다</td>
+<td>API 키 입력 후 새로고침 버튼 클릭 시 최신 모델 목록이 갱신된다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>사용자 정의 시스템 프롬프트를 설정하고 저장할 수 있다</td>
+<td>설정 창에서 시스템 프롬프트 수정 후 저장 및 적용이 가능하다</td>
+<td><strong>01:05 \~ 01:08</strong> (UI 노출 및 적용)</td>
+</tr>
+<tr>
+<td>R-15</td>
+<td>시스템 프롬프트를 AI를 가 한국 영어 둘 다 존재한다</td>
+<td>설정 창에서 한국어·영어 모두에서 존재한다</td>
+<td><strong>01:24</strong></td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>인터페이스 언어를 영어/한국어로 전환할 수 있다</td>
+<td>설정에서 언어 전환 시 UI 텍스트 및 프리셋 지시문이 해당 언어로 변경된다</td>
+<td><strong>00:36 \~ 00:37</strong></td>
+</tr>
+<tr>
+<td>R-17</td>
+<td>다크 모드와 라이트 모드를 전환할 수 있다</td>
+<td>설정에서 테마 전환 시 플로팅 메뉴와 설정 창의 색상 테마가 변경된다</td>
+<td><strong>00:38 \~ 00:41</strong></td>
+</tr>
+<tr>
+<td>R-18</td>
+<td>설정(API 키, 모델, 시스템 프롬프트, 언어, 테마)이 앱 재시작 후에도 유지된다</td>
+<td>앱 종료 후 재시작 시, 이전에 설정한 모든 값이 동일하게 유지된다</td>
+<td><strong>01:22</strong></td>
+</tr>
+<tr>
+<td>R-19</td>
+<td>플로팅 메뉴는 드래그로 화면 내 임의 위치로 이동할 수 있다</td>
+<td>메뉴 상단 드래그 핸들을 마우스로 드래그하면 메뉴가 해당 위치로 이동한다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-20</td>
+<td>플로팅 메뉴가 열린 상태에서 설정 창을 열 수 있다</td>
+<td>플로팅 메뉴 우측 상단의 설정 아이콘(⚙️)이 정상 노출된다</td>
+<td><strong>00:11</strong> (UI 노출), <strong>00:34</strong> (설정 진입)</td>
+</tr>
+<tr>
+<td>R-21</td>
+<td>앱은 시스템 트레이(메뉴바)에 상주하며 백그라운드에서 실행된다</td>
+<td>앱이 백그라운드에서 정상 실행 중이며 전역 단축키에 반응한다</td>
+<td><strong>00:11</strong>, <strong>00:26</strong> (간접 확인)</td>
+</tr>
+<tr>
+<td>R-22</td>
+<td>트레이 아이콘 메뉴를 통해 앱을 종료할 수 있다</td>
+<td>트레이 아이콘 우클릭 → Quit 선택 시 앱이 완전히 종료된다</td>
+<td><strong>01:16</strong></td>
+</tr>
+<tr>
+<td>R-23</td>
+<td>macOS, Windows, Linux 세 플랫폼에서 모두 동작한다</td>
+<td>각 플랫폼 빌드에서 핵심 기능(R-01\~R-09)이 동작한다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-24</td>
+<td>GitHub Actions를 통해 태그 push 시 세 플랫폼의 배포 파일이 자동 빌드 및 릴리즈된다</td>
+<td>버전 태그 push 시 GitHub Releases에 빌드 파일이 자동 업로드된다</td>
+<td><strong>02:04</strong></td>
+</tr>
+<tr>
+<td>R-25</td>
+<td>설치 스크립트 한 줄로 앱을 설치할 수 있다</td>
+<td><code>curl</code> 또는 PowerShell 명령 한 줄로 앱이 설치되고 실행된다</td>
+<td><strong>01:32</strong></td>
+</tr>
+<tr>
+<td>R-26</td>
+<td>삭제 스크립트 한 줄로 앱과 관련 데이터를 완전히 삭제할 수 있다</td>
+<td>삭제 스크립트 실행 시 앱 바이너리, 캐시, 설정 데이터가 모두 제거된다</td>
+<td><strong>01:32</strong></td>
+</tr>
+<tr>
+<td>R-27</td>
+<td>API 키가 입력되지 않은 상태에서 AI 기능 실행 시 사용자에게 경고 메시지를 표시한다</td>
+<td>API 키 미입력 시 결과 영역에 안내 메시지가 표시되고 앱이 비정상 종료되지 않는다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-28</td>
+<td>AI API 요청 실패 시 사용자에게 오류 메시지를 표시한다</td>
+<td>API 요청 실패 시 결과 영역에 오류 내용이 표시되고 앱이 비정상 종료되지 않는다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-29</td>
+<td>결과 붙여넣기 실패 시 사용자에게 원인과 해결 방법을 안내한다</td>
+<td>붙여넣기 실패 시 권한 설정 방법 등이 결과 영역에 표시된다</td>
+<td>N/A (영상 미시연)</td>
+</tr>
+<tr>
+<td>R-30</td>
+<td>Custom 제공사 옵션으로 OpenAI 호환 API 엔드포인트를 직접 지정하여 사용할 수 있다</td>
+<td>Custom 엔드포인트로 AI 요청이 정상 전송된다</td>
+<td><strong>00:57</strong> (UI 상 노출 확인)</td>
+</tr>
+</tbody>
+</table></div>
+<p>---</p>
+<h2>비고</h2>
+<ul>
+<li><strong>텍스트 캡처 방식</strong>: 접근성 API(macOS <code>AXUIElement</code> / Windows UI Automation)를 우선 사용하며, 실패 시 클립보드 + 키 입력 에뮬레이션(<code>Cmd+C</code> / <code>Ctrl+C</code>)으로 폴백한다.</li>
+<li><strong>붙여넣기 방식</strong>: 접근성 API를 우선 사용하며, 실패 시 클립보드 + 키 입력 에뮬레이션(<code>Cmd+V</code> / <code>Ctrl+V</code>)으로 폴백한다. 원래 클립보드 내용은 작업 전 임시 저장 후 복원한다.</li>
+<li><strong>단축키 중복 방지</strong>: 단축키 연속 입력 시 250ms 디바운싱을 적용하여 중복 실행을 방지한다.</li>
+<li><strong>제출 형식</strong>: 소스코드는 <code>.zip</code> 파일이 아닌 <code>src/</code> 디렉토리로 직접 제출됩니다. 테스트 코드는 <code>tests/</code> 디렉토리가 아닌 <code>src/src/</code> 내에 포함되어 있으며, 이는 <code>tests/README.md</code>에 명시되어 있습니다.</li>
+<li><strong>환경 변수 설정</strong>: 별도의 <code>.env</code> 파일은 필요하지 않습니다. API 키를 포함한 모든 설정은 앱 내 설정 창(Settings Window)에서 직접 입력 및 관리되도록 설계되었으며, 환경 변수 파일은 의도적으로 사용하지 않습니다. 앱 실행에 필요한 외부 의존 설정 값은 없으며, API 키만 앱 UI를 통해 입력하면 됩니다.</li>
+</ul>
